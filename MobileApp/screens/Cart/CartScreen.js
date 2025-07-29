@@ -34,12 +34,44 @@ const CartScreen = ({ navigation }) => {
 
     setLoading(true);
     try {
+      // Проверяем, есть ли товары с информацией о магазине
+      const itemsWithShop = cart.filter(item => item.shop);
+      const itemsWithoutShop = cart.filter(item => !item.shop);
+      
+      console.log('Items with shop:', itemsWithShop);
+      console.log('Items without shop:', itemsWithoutShop);
+      
+      if (itemsWithoutShop.length > 0) {
+        console.log('Some items don\'t have shop info, using first item\'s shop');
+        // Если у некоторых товаров нет информации о магазине, используем магазин первого товара
+        const firstShop = itemsWithShop[0]?.shop;
+        if (firstShop) {
+          itemsWithoutShop.forEach(item => {
+            item.shop = firstShop;
+          });
+        } else {
+          // Если нет товаров с информацией о магазине, используем информацию из продукта
+          itemsWithoutShop.forEach(item => {
+            if (item.shop) {
+              // У товара уже есть информация о магазине
+              return;
+            }
+            // Используем информацию о магазине из продукта, если она есть
+            if (item.shop) {
+              console.log('Using shop from product:', item.shop);
+            } else {
+              console.log('No shop info available for item:', item);
+            }
+          });
+        }
+      }
+      
       // Группируем товары по магазинам
       const itemsByShop = {};
       cart.forEach(item => {
         console.log('Processing item:', item);
         if (!item.shop) {
-          console.log('Item has no shop info:', item);
+          console.log('Item still has no shop info:', item);
           return;
         }
         
@@ -56,6 +88,12 @@ const CartScreen = ({ navigation }) => {
       console.log('Items by shop:', itemsByShop);
 
       // Создаем заказы для каждого магазина
+      if (Object.keys(itemsByShop).length === 0) {
+        console.log('No items to create orders for');
+        Alert.alert('Xəta', 'Səbətdə məhsul yoxdur');
+        return;
+      }
+      
       const orderPromises = Object.entries(itemsByShop).map(([shopId, items]) => {
         const orderData = {
           items: items
@@ -64,8 +102,9 @@ const CartScreen = ({ navigation }) => {
         return ordersAPI.createOrder(orderData);
       });
 
+      console.log('About to create orders...');
       const results = await Promise.all(orderPromises);
-      console.log('Orders created:', results);
+      console.log('Orders created successfully:', results);
 
       Alert.alert('Uğurlu', 'Sifariş uğurla verildi!');
       clearCart();

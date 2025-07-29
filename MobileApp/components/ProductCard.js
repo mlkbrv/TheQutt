@@ -27,6 +27,7 @@ const ProductCard = ({ product, onAddToCart, shop }) => {
     }
     
     console.log('Adding to cart:', { product, quantity, shop });
+    console.log('Shop parameter:', shop);
     onAddToCart(product, quantity, shop);
     setQuantity(1);
   };

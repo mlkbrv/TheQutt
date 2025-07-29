@@ -31,9 +31,14 @@ api.interceptors.request.use(
 
 // Интерцептор для обработки ошибок
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    console.log('Response received:', response.status, response.data);
+    return response;
+  },
   async (error) => {
     console.log('Response error:', error);
+    console.log('Error response:', error.response?.data);
+    console.log('Error status:', error.response?.status);
     
     if (error.code === 'ECONNABORTED') {
       console.log('Request timeout');
@@ -69,7 +74,13 @@ export const mapAPI = {
 };
 
 export const ordersAPI = {
-  getOrders: () => api.get('/orders/'),
-  createOrder: (orderData) => api.post('/orders/', orderData),
+  getOrders: () => {
+    console.log('Getting orders...');
+    return api.get('/orders/');
+  },
+  createOrder: (orderData) => {
+    console.log('Creating order with data:', orderData);
+    return api.post('/orders/', orderData);
+  },
   getOrderStatus: (orderId) => api.get(`/orders/${orderId}/status/`),
 }; 

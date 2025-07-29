@@ -22,13 +22,13 @@ class OrderListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         print(f"Creating order. User: {self.request.user}, Authenticated: {self.request.user.is_authenticated}")
         if self.request.user.is_authenticated:
-            order = serializer.save(user=self.request.user)
+            order = serializer.save()
             print(f"Order created successfully: {order.order_id}")
             return order
         else:
             print("User not authenticated, creating order without user")
             # Создаем заказ без пользователя для тестирования
-            order = serializer.save(user=None)
+            order = serializer.save()
             print(f"Order created without user: {order.order_id}")
             return order
 

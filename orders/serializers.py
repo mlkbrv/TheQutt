@@ -68,13 +68,25 @@ class OrderWriteSerializer(serializers.ModelSerializer):
         fields = ['items']
 
     def create(self, validated_data):
+        print(f"OrderWriteSerializer create called with data: {validated_data}")
         items_data = validated_data.pop('items')
+        print(f"Items data: {items_data}")
+        
+        # Получаем пользователя из контекста или используем None
+        user = self.context.get('request').user if self.context.get('request') else None
+        print(f"User from context: {user}")
+        
+        # Убираем user из validated_data, если он там есть
+        validated_data.pop('user', None)
+        
         order = Order.objects.create(
-            user=self.context['request'].user,
+            user=user,
             **validated_data
         )
+        print(f"Order created: {order.order_id}")
 
         for item_data in items_data:
+            print(f"Creating order item: {item_data}")
             OrderItem.objects.create(order=order, **item_data)
 
         return order

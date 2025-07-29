@@ -35,8 +35,9 @@ const ShopProductsScreen = ({ route, navigation }) => {
     }
   };
 
-  const handleAddToCart = (product, quantity) => {
-    addToCart(product, quantity);
+  const handleAddToCart = (product, quantity, shop) => {
+    console.log('ShopProductsScreen handleAddToCart:', { product, quantity, shop });
+    addToCart(product, quantity, shop);
     Alert.alert('Success', `${quantity}x ${product.name} added to cart`);
   };
 
