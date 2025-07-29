@@ -24,6 +24,7 @@ class Product(models.Model):
     quantity = models.IntegerField()
     price = models.IntegerField()
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
+    picture = models.ImageField(upload_to='product_pictures/', null=True, blank=True)
 
     def __str__(self):
         return self.name

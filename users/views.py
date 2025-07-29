@@ -52,7 +52,32 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 class ProfileView(generics.RetrieveUpdateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserProfileSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]  # Разрешаем доступ всем
 
     def get_object(self):
-        return self.request.user
+        if self.request.user.is_authenticated:
+            return self.request.user
+        else:
+            # Возвращаем дефолтный объект для неаутентифицированных пользователей
+            return None
+
+    def retrieve(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response({
+                "message": "Authentication required to view profile",
+                "user": {
+                    "id": None,
+                    "email": "user@example.com",
+                    "first_name": "User",
+                    "last_name": "",
+                    "profile_picture": None
+                }
+            }, status=status.HTTP_401_UNAUTHORIZED)
+        return super().retrieve(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response({
+                "message": "Authentication required to update profile"
+            }, status=status.HTTP_401_UNAUTHORIZED)
+        return super().update(request, *args, **kwargs)

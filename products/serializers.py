@@ -49,6 +49,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'quantity',
             'price',
             'shop',
+            'picture',
         ]
 
 class ShopWithProductsSerializer(serializers.ModelSerializer):
