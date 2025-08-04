@@ -22,9 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-dba*=)!q%2m4tc-nx*4z8c#739)xmt&mden0my=1@x$-on$#xh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.70']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.70','qutt.org','*']
 
 # Application definition
 
@@ -80,10 +80,15 @@ WSGI_APPLICATION = 'TheQutt.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Qutt',
+        'USER': 'qutt_admin',
+        'PASSWORD': '05042002Li!@#$%^&*()',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -149,3 +154,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',  # Разрешаем доступ по умолчанию
     ],
 }
+
+STATIC_URL = 'static/'
+
+# Папка, куда соберутся все статические файлы (для продакшена)
+STATIC_ROOT = BASE_DIR / 'staticfiles'
