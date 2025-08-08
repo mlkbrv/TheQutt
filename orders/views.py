@@ -11,7 +11,6 @@ class OrderListCreateView(generics.ListCreateAPIView):
         if self.request.user.is_authenticated:
             return Order.objects.filter(user=self.request.user).prefetch_related('orderitem_set__product', 'orderitem_set__shop')
         else:
-            # Возвращаем пустой queryset для неаутентифицированных пользователей
             return Order.objects.none()
 
     def get_serializer_class(self):
@@ -27,7 +26,6 @@ class OrderListCreateView(generics.ListCreateAPIView):
             return order
         else:
             print("User not authenticated, creating order without user")
-            # Создаем заказ без пользователя для тестирования
             order = serializer.save()
             print(f"Order created without user: {order.order_id}")
             return order
