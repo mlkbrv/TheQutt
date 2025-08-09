@@ -13,7 +13,7 @@ from .serializers import ShopSerializer, ShopCreateSerializer, ProductSerializer
 from .permissions import IsAdminOrReadOnly
 
 
-class ShopOwnersListView(ListAPIView):
+class ShopOwnersListCreateView(ListCreateAPIView):
     serializer_class = ShopOwnerSerializer
     permission_classes = [IsAdminOrReadOnly]
     
