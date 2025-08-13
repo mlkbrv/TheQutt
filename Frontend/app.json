@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "Qutt",
+    "slug": "qutt-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#2E7D32"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Приложению необходим доступ к местоположению для показа ближайших магазинов на карте",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Приложению необходим доступ к местоположению для показа ближайших магазинов на карте"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#2E7D32"
+      },
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "INTERNET"
+      ],
+      "usesCleartextTraffic": true
+    },
+    "web": {}
+  }
+}

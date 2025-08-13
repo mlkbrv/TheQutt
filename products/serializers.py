@@ -2,6 +2,7 @@ from rest_framework import serializers
 from users.models import CustomUser
 from .models import Shop,ShopCategory,Product
 from map.models import Location
+from django.conf import settings
 
 class ShopOwnerSerializer(serializers.ModelSerializer):
     shops = serializers.SerializerMethodField()
@@ -39,9 +40,17 @@ class LocationSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'description', 'latitude', 'longitude']
 
 class ShopSerializer(serializers.ModelSerializer):
-    category = ShopCategorySerializer(read_only=True)
+    category = serializers.CharField(source='category.name', read_only=True)
     location = LocationSerializer(read_only=True)
     owner = ShopOwnerSerializer(read_only=True)
+    picture = serializers.SerializerMethodField()
+    
+    def get_picture(self, obj):
+        if obj.picture:
+            # Возвращаем только имя файла
+            return obj.picture.name.replace('shop_pictures/', '')
+        return None
+    
     class Meta:
         model = Shop
         fields = [
@@ -58,17 +67,11 @@ class ShopSerializer(serializers.ModelSerializer):
 
 class ShopCreateSerializer(serializers.ModelSerializer):
     """
-    Serializer for creating shops by admin with owner selection
+    Serializer for creating shops by shop owners
     """
-    owner = serializers.PrimaryKeyRelatedField(
-        queryset=CustomUser.objects.all(),
+    category = serializers.CharField(
         required=True,
-        help_text="Select the owner for this shop"
-    )
-    category = serializers.PrimaryKeyRelatedField(
-        queryset=ShopCategory.objects.all(),
-        required=True,
-        help_text="Select the category for this shop"
+        help_text="Category name for this shop (e.g., 'restaurant', 'cafe')"
     )
     location = serializers.PrimaryKeyRelatedField(
         queryset=Location.objects.all(),
@@ -88,8 +91,14 @@ class ShopCreateSerializer(serializers.ModelSerializer):
             'location',
             'picture',
             'opening_hours',
-            'owner'
         ]
+    
+    def create(self, validated_data):
+        category_name = validated_data.pop('category')
+        category, created = ShopCategory.objects.get_or_create(name=category_name.lower())
+        validated_data['category'] = category
+        validated_data['owner'] = self.context['request'].user
+        return super().create(validated_data)
     
     def to_representation(self, instance):
         """Return full shop data when serializing"""
@@ -103,8 +112,40 @@ class ShopNameSerializer(serializers.ModelSerializer):
             'name',
         ]
 
+class ProductCreateSerializer(serializers.ModelSerializer):
+    """
+    Serializer for creating products by shop owners
+    """
+    class Meta:
+        model = Product
+        fields = [
+            'id',
+            'name',
+            'description',
+            'quantity',
+            'price',
+            'shop',
+            'picture',
+        ]
+        read_only_fields = ['id']
+
+    def validate_shop(self, value):
+        # Проверяем, что пользователь является владельцем магазина
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            if value.owner != request.user:
+                raise serializers.ValidationError("You can only add products to your own shops")
+        return value
+
 class ProductSerializer(serializers.ModelSerializer):
     shop = ShopNameSerializer(read_only=True)
+    picture = serializers.SerializerMethodField()
+
+    def get_picture(self, obj):
+        if obj.picture:
+            # Возвращаем только имя файла
+            return obj.picture.name.replace('product_pictures/', '')
+        return None
 
     class Meta:
         model = Product
@@ -119,9 +160,16 @@ class ProductSerializer(serializers.ModelSerializer):
         ]
 
 class ShopWithProductsSerializer(serializers.ModelSerializer):
-    category = ShopCategorySerializer(read_only=True)
+    category = serializers.CharField(source='category.name', read_only=True)
     location = LocationSerializer(read_only=True)
     products = ProductSerializer(many=True, read_only=True)
+    picture = serializers.SerializerMethodField()
+    
+    def get_picture(self, obj):
+        if obj.picture:
+            # Возвращаем только имя файла
+            return obj.picture.name.replace('shop_pictures/', '')
+        return None
     
     class Meta:
         model = Shop
