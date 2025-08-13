@@ -1,7 +1,21 @@
 from rest_framework import generics, permissions, status, serializers
 from rest_framework.response import Response
 from .models import Order
-from .serializers import OrderReadSerializer, OrderWriteSerializer
+from .serializers import OrderReadSerializer, OrderWriteSerializer, ShopOwnerOrderSerializer
+from products.models import Shop
+
+
+class IsShopOwner(permissions.BasePermission):
+    """
+    Разрешение для проверки, является ли пользователь владельцем магазина
+    """
+    def has_permission(self, request, view):
+        # Проверяем, что пользователь аутентифицирован
+        if not request.user.is_authenticated:
+            return False
+        
+        # Проверяем, что пользователь является владельцем хотя бы одного магазина
+        return Shop.objects.filter(owner=request.user).exists()
 
 
 class OrderListCreateView(generics.ListCreateAPIView):
@@ -84,3 +98,64 @@ class OrderStatusUpdateView(generics.UpdateAPIView):
             OrderReadSerializer(order, context=self.get_serializer_context()).data,
             status=status.HTTP_200_OK
         )
+
+class MyShopOrderListCreateAPIView(generics.ListCreateAPIView):
+    """
+    API для просмотра и создания заказов, связанных с магазинами пользователя.
+    Доступно только владельцам магазинов.
+    """
+    permission_classes = [IsShopOwner]
+    serializer_class = ShopOwnerOrderSerializer
+    
+    def get_queryset(self):
+        """
+        Возвращает только заказы, связанные с магазинами текущего пользователя
+        """
+        if not self.request.user.is_authenticated:
+            return Order.objects.none()
+        
+        # Получаем все магазины пользователя
+        user_shops = Shop.objects.filter(owner=self.request.user)
+        
+        # Получаем заказы, которые содержат товары из магазинов пользователя
+        return Order.objects.filter(
+            orderitem_set__shop__in=user_shops
+        ).distinct().prefetch_related(
+            'orderitem_set__product', 
+            'orderitem_set__shop',
+            'user'
+        ).order_by('-created_at')
+    
+    def get_serializer_class(self):
+        """
+        Возвращает сериализатор в зависимости от метода запроса
+        """
+        if self.request.method == 'POST':
+            return OrderWriteSerializer
+        return ShopOwnerOrderSerializer
+    
+    def perform_create(self, serializer):
+        """
+        Создание заказа с проверкой прав доступа
+        """
+        # Проверяем, что пользователь является владельцем магазина
+        if not Shop.objects.filter(owner=self.request.user).exists():
+            raise serializers.ValidationError("Only shop owners can create orders")
+        
+        order = serializer.save()
+        return order
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        
+        if not queryset.exists():
+            return Response({
+                "message": "No orders found for your shops",
+                "orders": []
+            }, status=status.HTTP_200_OK)
+        
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({
+            "message": f"Found {queryset.count()} orders for your shops",
+            "orders": serializer.data
+        }, status=status.HTTP_200_OK) 
