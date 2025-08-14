@@ -27,8 +27,14 @@
         "ACCESS_COARSE_LOCATION",
         "INTERNET"
       ],
-      "usesCleartextTraffic": true
+      "usesCleartextTraffic": true,
+      "package": "com.emil_a.quttapp"
     },
-    "web": {}
+    "web": {},
+    "extra": {
+      "eas": {
+        "projectId": "af8fa39a-0726-4bcd-8150-41e704a6af0c"
+      }
+    }
   }
 }

@@ -278,3 +278,4 @@ INFO 2025-08-14 00:16:39,515 views 23608 32708 Shop 12: ID=12, Name=Golden Drago
 INFO 2025-08-14 00:16:39,515 views 23608 32708   Coordinates: lat=40.7505, lng=-73.9934
 INFO 2025-08-14 00:16:39,515 basehttp 23608 32708 "GET /products/shops/ HTTP/1.1" 200 6384
 INFO 2025-08-14 00:16:46,091 basehttp 23608 32708 "GET /users/profile/ HTTP/1.1" 200 105
+INFO 2025-08-14 13:38:25,487 autoreload 17776 21136 Watching for file changes with StatReloader
