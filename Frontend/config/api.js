@@ -1,5 +1,5 @@
 // API Configuration for Qutt App
-export const BASE_URL = 'http://192.168.1.70:8000';
+export const BASE_URL = 'https://thequtt-9nuq.onrender.com';
 
 export const API_CONFIG = {
   // Base URL for Django backend

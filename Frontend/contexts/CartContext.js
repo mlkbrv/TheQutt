@@ -34,7 +34,7 @@ export const CartProvider = ({ children }) => {
         setCartItems(JSON.parse(savedCart));
       }
     } catch (error) {
-      console.error('Ошибка загрузки корзины:', error);
+      console.error('Səbəti yükləmə xətası:', error);
     }
   };
 
@@ -42,7 +42,7 @@ export const CartProvider = ({ children }) => {
     try {
       await AsyncStorage.setItem('cart', JSON.stringify(cartItems));
     } catch (error) {
-      console.error('Ошибка сохранения корзины:', error);
+      console.error('Səbəti saxlama xətası:', error);
     }
   };
 

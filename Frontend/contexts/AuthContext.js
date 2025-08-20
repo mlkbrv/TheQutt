@@ -35,15 +35,15 @@ export const AuthProvider = ({ children }) => {
   const loadStoredToken = async () => {
     try {
       const storedToken = await AsyncStorage.getItem('accessToken');
-      console.log('🔍 Loaded stored token:', storedToken ? 'exists' : 'not found');
+      console.log('🔍 Saxlanılan token yükləndi:', storedToken ? 'mövcuddur' : 'tapılmadı');
       if (storedToken) {
         setToken(storedToken);
-        console.log('✅ Token set in state:', storedToken.substring(0, 20) + '...');
+        console.log('✅ Token state-də təyin edildi:', storedToken.substring(0, 20) + '...');
         
         // Показываем информацию о токене для отладки
         const tokenInfo = getTokenInfo(storedToken);
         if (tokenInfo) {
-          console.log('📊 Token info:', tokenInfo);
+          console.log('📊 Token məlumatları:', tokenInfo);
         }
         
         // Загружаем информацию о пользователе
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
         
         // Проверяем, нужно ли обновить токен
         if (shouldRefreshToken(storedToken)) {
-          console.log('⚠️ Token needs immediate refresh');
+          console.log('⚠️ Token dərhal yenilənməlidir');
           await refreshToken();
         } else {
           // Планируем обновление токена
@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
         }
       }
     } catch (error) {
-      console.error('❌ Error loading stored token:', error);
+      console.error('❌ Saxlanılan token yükləmə xətası:', error);
     } finally {
       setIsLoading(false);
     }
@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }) => {
       // Пока просто устанавливаем базовую информацию
       setUser({ token });
     } catch (error) {
-      console.error('Error loading user info:', error);
+      console.error('İstifadəçi məlumatlarını yükləmə xətası:', error);
     }
   };
 
@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }) => {
       // Обновляем токен за 5 минут до истечения
       const refreshTime = Math.max(timeUntilExpiry - (5 * 60 * 1000), 60000); // минимум 1 минута
       
-      console.log(`⏰ Token expires in ${Math.round(timeUntilExpiry / 1000)}s, will refresh in ${Math.round(refreshTime / 1000)}s`);
+      console.log(`⏰ Token ${Math.round(timeUntilExpiry / 1000)}s-də vaxtı keçəcək, ${Math.round(refreshTime / 1000)}s-də yenilənəcək`);
       
       // Очищаем предыдущий таймер
       if (refreshTimeoutRef.current) {
@@ -91,12 +91,12 @@ export const AuthProvider = ({ children }) => {
       
       // Устанавливаем новый таймер
       refreshTimeoutRef.current = setTimeout(() => {
-        console.log('🔄 Scheduled token refresh triggered');
+        console.log('🔄 Planlaşdırılan token yeniləməsi başladı');
         refreshToken();
       }, refreshTime);
       
     } catch (error) {
-      console.error('❌ Error scheduling token refresh:', error);
+      console.error('❌ Token yeniləmə planlaşdırma xətası:', error);
     }
   };
 

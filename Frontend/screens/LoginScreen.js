@@ -23,7 +23,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Ошибка', 'Пожалуйста, заполните все поля');
+      Alert.alert('Xəta', 'Bütün sahələri doldurun');
       return;
     }
 
@@ -35,21 +35,21 @@ const LoginScreen = ({ navigation }) => {
       });
 
       if (response.data.access) {
-        console.log('🎉 Login successful, token received:', response.data.access.substring(0, 20) + '...');
+        console.log('🎉 Giriş uğurlu, token alındı:', response.data.access.substring(0, 20) + '...');
         await login(response.data.access, response.data.refresh);
-        console.log('✅ Login function completed');
-        Alert.alert('Успех!', 'Добро пожаловать в Qutt! 🎉', [
+        console.log('✅ Giriş funksiyası tamamlandı');
+        Alert.alert('Uğurlu!', 'Qutt-a xoş gəlmisiniz! 🎉', [
           {
-            text: 'Отлично!',
+            text: 'Əla!',
             onPress: () => {} // Навигация произойдет автоматически через изменение состояния аутентификации
           }
         ]);
       }
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('Giriş xətası:', error);
       Alert.alert(
-        'Ошибка входа',
-        error.response?.data?.detail || 'Неверный email или пароль'
+        'Giriş Xətası',
+        error.response?.data?.detail || 'Yanlış email və ya şifrə'
       );
     } finally {
       setIsLoading(false);
@@ -66,7 +66,7 @@ const LoginScreen = ({ navigation }) => {
           {/* Header */}
           <View style={styles.header}>
             <Text style={styles.logo}>🍽️ Qutt</Text>
-            <Text style={styles.tagline}>Добро пожаловать обратно! 👋</Text>
+            <Text style={styles.tagline}>Xoş qayıtdınız! 👋</Text>
           </View>
 
           {/* Login Form */}
@@ -75,7 +75,7 @@ const LoginScreen = ({ navigation }) => {
               <Text style={styles.inputLabel}>📧 Email</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Введите ваш email"
+                placeholder="Email ünvanınızı daxil edin"
                 placeholderTextColor="#9E9E9E"
                 value={email}
                 onChangeText={setEmail}
@@ -85,10 +85,10 @@ const LoginScreen = ({ navigation }) => {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>🔒 Пароль</Text>
+              <Text style={styles.inputLabel}>🔒 Şifrə</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Введите ваш пароль"
+                placeholder="Şifrənizi daxil edin"
                 placeholderTextColor="#9E9E9E"
                 value={password}
                 onChangeText={setPassword}
@@ -102,26 +102,26 @@ const LoginScreen = ({ navigation }) => {
               disabled={isLoading}
             >
               <Text style={styles.loginButtonText}>
-                {isLoading ? 'Вход... 🔄' : 'Войти 🚀'}
+                {isLoading ? 'Daxil olunur... 🔄' : 'Daxil Ol 🚀'}
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.forgotPassword}
-              onPress={() => Alert.alert('Информация', 'Функция восстановления пароля в разработке')}
+              onPress={() => Alert.alert('Məlumat', 'Şifrə bərpası funksiyası inkişaf mərhələsindədir')}
             >
-              <Text style={styles.forgotPasswordText}>Забыли пароль? 🤔</Text>
+              <Text style={styles.forgotPasswordText}>Şifrəni unutmusunuz? 🤔</Text>
             </TouchableOpacity>
           </View>
 
           {/* Footer */}
           <View style={styles.footer}>
-            <Text style={styles.footerText}>Нет аккаунта? Создайте его!</Text>
+            <Text style={styles.footerText}>Hesabınız yoxdur? Yaradın!</Text>
             <TouchableOpacity
               style={styles.registerButton}
               onPress={() => navigation.navigate('Register')}
             >
-              <Text style={styles.registerButtonText}>Зарегистрироваться ✨</Text>
+              <Text style={styles.registerButtonText}>Qeydiyyat ✨</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

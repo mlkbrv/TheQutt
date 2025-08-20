@@ -81,7 +81,7 @@ const ShopProductsScreen = ({ route, navigation }) => {
     try {
       // Если данные уже есть и не требуется принудительное обновление, пропускаем загрузку
       if (!forceRefresh && products.length > 0) {
-        console.log('📱 Products already loaded, skipping fetch');
+        console.log('📱 Məhsullar artıq yüklənib, yükləmə atlanır');
         return;
       }
       
@@ -92,9 +92,9 @@ const ShopProductsScreen = ({ route, navigation }) => {
       );
       setProducts(response.data);
     } catch (error) {
-      console.error('❌ Error fetching products:', error);
-      console.error('📊 Error response:', error.response?.data);
-      console.error('🔢 Error status:', error.response?.status);
+      console.error('❌ Məhsulları yükləmə xətası:', error);
+      console.error('📊 Xəta cavabı:', error.response?.data);
+      console.error('🔢 Xəta statusu:', error.response?.status);
       
       // Если токен истек, пытаемся обновить его
       if (error.response?.status === 401 && error.response?.data?.code === 'token_not_valid') {
@@ -129,14 +129,14 @@ const ShopProductsScreen = ({ route, navigation }) => {
         picture: selectedProduct.picture
       });
       
-      Alert.alert(
-        'Успешно!', 
-        `${selectedProduct.name} добавлен в корзину (${quantity} шт.)`,
-        [
-          { text: 'Продолжить покупки', onPress: () => setModalVisible(false) },
-          { text: 'Перейти в корзину', onPress: () => navigation.navigate('CartTab') }
-        ]
-      );
+              Alert.alert(
+          'Uğurlu!', 
+          `${selectedProduct.name} səbətə əlavə edildi (${quantity} ədəd)`,
+          [
+            { text: 'Davam et', onPress: () => setModalVisible(false) },
+            { text: 'Səbətə keçid', onPress: () => navigation.navigate('CartTab') }
+          ]
+        );
       
       setQuantity(1);
       setSelectedProduct(null);
@@ -187,8 +187,8 @@ const ShopProductsScreen = ({ route, navigation }) => {
           {item.description}
         </Text>
         <View style={styles.productFooter}>
-          <Text style={styles.productPrice}>💰 {item.price} ₽</Text>
-          <Text style={styles.productQuantity}>📦 {item.quantity} шт.</Text>
+          <Text style={styles.productPrice}>💰 {item.price} ₼</Text>
+          <Text style={styles.productQuantity}>📦 {item.quantity} ədəd</Text>
         </View>
       </View>
       
@@ -205,7 +205,7 @@ const ShopProductsScreen = ({ route, navigation }) => {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#4CAF50" />
-        <Text style={styles.loadingText}>Загрузка товаров...</Text>
+        <Text style={styles.loadingText}>Məhsullar yüklənir...</Text>
       </View>
     );
   }
@@ -280,12 +280,12 @@ const ShopProductsScreen = ({ route, navigation }) => {
                 </Text>
 
                 <View style={styles.modalInfo}>
-                  <Text style={styles.modalPrice}>💰 Цена: {selectedProduct.price} ₽</Text>
-                  <Text style={styles.modalStock}>📦 В наличии: {selectedProduct.quantity} шт.</Text>
+                  <Text style={styles.modalPrice}>💰 Qiymət: {selectedProduct.price} ₼</Text>
+                  <Text style={styles.modalStock}>📦 Stokda: {selectedProduct.quantity} ədəd</Text>
                 </View>
 
                 <View style={styles.quantityContainer}>
-                  <Text style={styles.quantityLabel}>Количество:</Text>
+                  <Text style={styles.quantityLabel}>Miqdar:</Text>
                   <View style={styles.quantityControls}>
                     <TouchableOpacity
                       style={styles.quantityButton}
@@ -308,8 +308,8 @@ const ShopProductsScreen = ({ route, navigation }) => {
                 </View>
 
                 <View style={styles.modalTotal}>
-                  <Text style={styles.totalLabel}>Итого:</Text>
-                  <Text style={styles.totalValue}>{selectedProduct.price * quantity} ₽</Text>
+                  <Text style={styles.totalLabel}>Ümumi:</Text>
+                  <Text style={styles.totalValue}>{selectedProduct.price * quantity} ₼</Text>
                 </View>
 
                 <TouchableOpacity
@@ -317,7 +317,7 @@ const ShopProductsScreen = ({ route, navigation }) => {
                   onPress={handleAddToCart}
                 >
                   <Text style={styles.addToCartButtonText}>
-                    🛒 Добавить в корзину
+                    🛒 Səbətə əlavə et
                   </Text>
                 </TouchableOpacity>
               </>

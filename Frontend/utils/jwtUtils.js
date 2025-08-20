@@ -1,5 +1,5 @@
 /**
- * Утилиты для работы с JWT токенами
+ * JWT tokenləri ilə iş üçün utilitlər
  */
 
 // Полифилл для Buffer в React Native
@@ -8,9 +8,9 @@ if (typeof global !== 'undefined' && !global.Buffer) {
 }
 
 /**
- * Парсит JWT токен и возвращает payload
- * @param {string} token - JWT токен
- * @returns {object|null} - payload токена или null при ошибке
+ * JWT tokeni parse edir və payload qaytarır
+ * @param {string} token - JWT token
+ * @returns {object|null} - token payload və ya xəta zamanı null
  */
 export const parseJWT = (token) => {
   try {
@@ -38,15 +38,15 @@ export const parseJWT = (token) => {
     
     return JSON.parse(jsonPayload);
   } catch (error) {
-    console.error('❌ Error parsing JWT token:', error);
+    console.error('❌ JWT token parse etmə xətası:', error);
     return null;
   }
 };
 
 /**
- * Проверяет, истек ли токен
- * @param {string} token - JWT токен
- * @returns {boolean} - true если токен истек
+ * Tokenin vaxtının keçib-keçmədiyini yoxlayır
+ * @param {string} token - JWT token
+ * @returns {boolean} - true əgər token vaxtı keçibsə
  */
 export const isTokenExpired = (token) => {
   try {
@@ -56,15 +56,15 @@ export const isTokenExpired = (token) => {
     const currentTime = Math.floor(Date.now() / 1000);
     return payload.exp < currentTime;
   } catch (error) {
-    console.error('❌ Error checking token expiration:', error);
+    console.error('❌ Token vaxtı yoxlanılarkən xəta:', error);
     return true;
   }
 };
 
 /**
- * Возвращает время до истечения токена в миллисекундах
- * @param {string} token - JWT токен
- * @returns {number} - время до истечения в миллисекундах
+ * Tokenin vaxtının keçməsinə qədər olan vaxtı millisaniyələrdə qaytarır
+ * @param {string} token - JWT token
+ * @returns {number} - vaxtının keçməsinə qədər olan vaxt millisaniyələrdə
  */
 export const getTimeUntilExpiry = (token) => {
   try {
@@ -76,15 +76,15 @@ export const getTimeUntilExpiry = (token) => {
     
     return Math.max(timeUntilExpiry * 1000, 0); // конвертируем в миллисекунды
   } catch (error) {
-    console.error('❌ Error getting time until expiry:', error);
+    console.error('❌ Vaxtın keçməsinə qədər olan vaxtı alma xətası:', error);
     return 0;
   }
 };
 
 /**
- * Проверяет, нужно ли обновить токен (за 5 минут до истечения)
- * @param {string} token - JWT токен
- * @returns {boolean} - true если нужно обновить
+ * Tokenin yenilənməli olub-olmadığını yoxlayır (vaxtının keçməsindən 5 dəqiqə əvvəl)
+ * @param {string} token - JWT token
+ * @returns {boolean} - true əgər yenilənməlidirsə
  */
 export const shouldRefreshToken = (token) => {
   try {
@@ -93,15 +93,15 @@ export const shouldRefreshToken = (token) => {
     
     return timeUntilExpiry <= fiveMinutes;
   } catch (error) {
-    console.error('❌ Error checking if token should be refreshed:', error);
+    console.error('❌ Tokenin yenilənməli olub-olmadığını yoxlama xətası:', error);
     return true;
   }
 };
 
 /**
- * Получает информацию о токене для отладки
- * @param {string} token - JWT токен
- * @returns {object} - информация о токене
+ * Debug üçün token haqqında məlumat alır
+ * @param {string} token - JWT token
+ * @returns {object} - token haqqında məlumat
  */
 export const getTokenInfo = (token) => {
   try {
@@ -120,28 +120,28 @@ export const getTokenInfo = (token) => {
       shouldRefresh: shouldRefreshToken(token)
     };
   } catch (error) {
-    console.error('❌ Error getting token info:', error);
+    console.error('❌ Token məlumatlarını alma xətası:', error);
     return null;
   }
 };
 
 /**
- * Форматирует время в читаемом виде
- * @param {number} seconds - время в секундах
- * @returns {string} - отформатированное время
+ * Vaxtı oxunaqlı formada format edir
+ * @param {number} seconds - vaxt saniyələrdə
+ * @returns {string} - format edilmiş vaxt
  */
 const formatTime = (seconds) => {
-  if (seconds <= 0) return 'Истек';
+  if (seconds <= 0) return 'Vaxtı keçib';
   
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   const secs = seconds % 60;
   
   if (hours > 0) {
-    return `${hours}ч ${minutes}м ${secs}с`;
+    return `${hours}s ${minutes}d ${secs}s`;
   } else if (minutes > 0) {
-    return `${minutes}м ${secs}с`;
+    return `${minutes}d ${secs}s`;
   } else {
-    return `${secs}с`;
+    return `${secs}s`;
   }
 };

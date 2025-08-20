@@ -34,7 +34,7 @@ const MapScreen = ({ navigation }) => {
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        console.log('Разрешение на местоположение не предоставлено');
+        console.log('Məkan icazəsi verilmədi');
         return;
       }
 
@@ -44,28 +44,28 @@ const MapScreen = ({ navigation }) => {
         longitude: location.coords.longitude,
       });
     } catch (error) {
-      console.log('Ошибка получения местоположения:', error);
+      console.log('Məkan alma xətası:', error);
     }
   };
 
   const fetchShops = async () => {
     try {
       setLoading(true);
-      console.log('=== НАЧАЛО ЗАГРУЗКИ МАГАЗИНОВ ===');
-      console.log('Загружаем магазины с URL:', API_CONFIG.SHOPS_URL);
-      console.log('Токен:', token ? 'Есть' : 'Нет');
-      console.log('Полный URL:', API_CONFIG.SHOPS_URL);
+      console.log('=== MAĞAZA YÜKLƏMƏ BAŞLANIR ===');
+      console.log('Mağazalar yüklənir URL-dən:', API_CONFIG.SHOPS_URL);
+      console.log('Token:', token ? 'Bəli' : 'Xeyr');
+      console.log('Tam URL:', API_CONFIG.SHOPS_URL);
       
       const headers = getAuthHeaders(token);
-      console.log('Заголовки запроса:', headers);
+      console.log('Sorğu başlıqları:', headers);
       
       // Проверяем доступность сервера
       try {
         const testResponse = await axios.get(`${API_CONFIG.BASE_URL}/`, { timeout: 5000 });
-        console.log('Сервер доступен, статус:', testResponse.status);
+        console.log('Server əlçatandır, status:', testResponse.status);
       } catch (testError) {
-        console.error('Сервер недоступен:', testError.message);
-        Alert.alert('Ошибка', 'Сервер недоступен. Проверьте, что Django сервер запущен.');
+        console.error('Server əlçatan deyil:', testError.message);
+        Alert.alert('Xəta', 'Server əlçatan deyil. Django serverin işlədiyini yoxlayın.');
         setShops([]);
         setLoading(false);
         return;
@@ -76,16 +76,16 @@ const MapScreen = ({ navigation }) => {
         timeout: 10000 
       });
 
-      console.log('=== УСПЕШНЫЙ ОТВЕТ ===');
-      console.log('Ответ сервера:', response.status, response.statusText);
-      console.log('Заголовки ответа:', response.headers);
-      console.log('Загруженные магазины:', response.data);
+      console.log('=== UĞURLU CAVAB ===');
+      console.log('Server cavabı:', response.status, response.statusText);
+      console.log('Cavab başlıqları:', response.headers);
+      console.log('Yüklənən mağazalar:', response.data);
       
       // Детальное логирование структуры данных
       if (response.data && response.data.length > 0) {
-        console.log('=== ДЕТАЛЬНАЯ СТРУКТУРА ДАННЫХ ===');
+        console.log('=== DƏTALLI MƏLUMAT STRUKTURU ===');
         response.data.forEach((shop, index) => {
-          console.log(`Магазин ${index + 1}:`, {
+          console.log(`Mağaza ${index + 1}:`, {
             id: shop.id,
             name: shop.name,
             category: shop.category,
@@ -107,24 +107,24 @@ const MapScreen = ({ navigation }) => {
         !isNaN(shop.location.longitude)
       );
 
-      console.log('Магазины с валидными координатами:', validShops);
-      console.log('=== КОНЕЦ ЗАГРУЗКИ ===');
+      console.log('Shops with valid coordinates:', validShops);
+      console.log('=== LOADING COMPLETE ===');
       setShops(validShops);
     } catch (error) {
-      console.error('=== ОШИБКА ЗАГРУЗКИ ===');
-      console.error('Полная ошибка:', error);
+      console.error('=== LOADING ERROR ===');
+      console.error('Full error:', error);
       
       if (error.response) {
-        console.error('Детали ошибки:', error.response.status, error.response.data);
-        console.error('Заголовки ответа:', error.response.headers);
-        Alert.alert('Ошибка', `HTTP ${error.response.status}: ${error.response.statusText}`);
+        console.error('Error details:', error.response.status, error.response.data);
+        console.error('Response headers:', error.response.headers);
+        Alert.alert('Xəta', `HTTP ${error.response.status}: ${error.response.statusText}`);
       } else if (error.request) {
-        console.error('Запрос был отправлен, но ответ не получен:', error.request);
-        console.error('Детали запроса:', error.request._response);
-        Alert.alert('Ошибка', 'Сервер не отвечает. Проверьте подключение к интернету.');
+        console.error('Request was sent but no response received:', error.request);
+        console.error('Request details:', error.request._response);
+        Alert.alert('Xəta', 'Server yoxlanılır. Internet bağlantısını yoxlayın.');
       } else {
-        console.error('Ошибка настройки запроса:', error.message);
-        Alert.alert('Ошибка', `Ошибка настройки запроса: ${error.message}`);
+        console.error('Request setup error:', error.message);
+        Alert.alert('Xəta', `Sorğu quraşdırma xətası: ${error.message}`);
       }
       setShops([]);
     } finally {
@@ -186,10 +186,10 @@ const MapScreen = ({ navigation }) => {
         .bindPopup(\`
           <div style="text-align: center; min-width: 200px;">
             <h3 style="margin: 0 0 10px 0; color: #333;">${shop.name}</h3>
-            <p style="margin: 0 0 5px 0; color: #666;">${shop.description || 'Описание отсутствует'}</p>
-            <p style="margin: 0 0 5px 0; color: #888;">${shop.category?.name || 'Магазин'}</p>
+            <p style="margin: 0 0 5px 0; color: #666;">${shop.description || 'Açıqlama mövcud deyil'}</p>
+            <p style="margin: 0 0 5px 0; color: #888;">${shop.category?.name || 'Mağaza'}</p>
             <p style="margin: 0; color: #888;">📍 ${shop.address}</p>
-            <button onclick="selectShop('${shop.id}')" style="background: #4CAF50; color: white; border: none; padding: 8px 16px; border-radius: 4px; margin-top: 10px; cursor: pointer;">Смотреть товары</button>
+            <button onclick="selectShop('${shop.id}')" style="background: #4CAF50; color: white; border: none; padding: 8px 16px; border-radius: 4px; margin-top: 10px; cursor: pointer;">Məhsulaları baxın</button>
           </div>
         \`)
         .addTo(map);
@@ -205,7 +205,7 @@ const MapScreen = ({ navigation }) => {
           iconAnchor: [15, 15]
         })
       })
-      .bindPopup('<b>Ваше местоположение</b>')
+      .bindPopup('<b>Sizin Məkanınız</b>')
       .addTo(map);
     ` : '';
 
@@ -248,13 +248,13 @@ const MapScreen = ({ navigation }) => {
               maxZoom: 19
             }).addTo(map);
 
-            // Добавляем маркер пользователя
+            // Add user marker
             ${userLocationMarker}
 
-            // Добавляем маркеры магазинов
+            // Add shop markers
             ${shopsMarkers}
 
-            // Функция для выбора магазина
+            // Function for shop selection
             function selectShop(shopId) {
               window.ReactNativeWebView.postMessage(JSON.stringify({
                 type: 'shopSelected',
@@ -262,7 +262,7 @@ const MapScreen = ({ navigation }) => {
               }));
             }
 
-            // Обработчик сообщений от React Native
+            // React Native message handler
             window.addEventListener('message', function(event) {
               const data = JSON.parse(event.data);
               if (data.type === 'centerOnUser' && ${userLocation ? 'true' : 'false'}) {
@@ -290,7 +290,7 @@ const MapScreen = ({ navigation }) => {
         }
       }
     } catch (error) {
-      console.error('Ошибка обработки сообщения от WebView:', error);
+      console.error('WebView mesajını emal etmə xətası:', error);
     }
   };
 
@@ -298,7 +298,7 @@ const MapScreen = ({ navigation }) => {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#4CAF50" />
-        <Text style={styles.loadingText}>Загрузка карты...</Text>
+        <Text style={styles.loadingText}>Xəritə yüklənir...</Text>
       </View>
     );
   }
@@ -306,12 +306,12 @@ const MapScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>🗺️ Карта магазинов</Text>
+        <Text style={styles.headerTitle}>🗺️ Mağaza Xəritəsi</Text>
         <TouchableOpacity 
           style={styles.cartButton}
           onPress={() => navigation.navigate('Cart')}
         >
-          <Text style={styles.cartButtonText}>��</Text>
+          <Text style={styles.cartButtonText}>🛒</Text>
           {/* {cartItems.length > 0 && (
             <View style={styles.cartBadge}>
               <Text style={styles.cartBadgeText}>
@@ -332,7 +332,7 @@ const MapScreen = ({ navigation }) => {
         renderLoading={() => (
           <View style={styles.webViewLoading}>
             <ActivityIndicator size="large" color="#4CAF50" />
-            <Text style={styles.webViewLoadingText}>Загрузка карты...</Text>
+            <Text style={styles.webViewLoadingText}>Xəritə yüklənir...</Text>
           </View>
         )}
       />
@@ -349,7 +349,7 @@ const MapScreen = ({ navigation }) => {
             }
           }}
         >
-          <Text style={styles.controlButtonText}>📍 Мое местоположение</Text>
+          <Text style={styles.controlButtonText}>📍 Mənim Məkanım</Text>
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.controlButton} 
@@ -361,7 +361,7 @@ const MapScreen = ({ navigation }) => {
             }
           }}
         >
-          <Text style={styles.controlButtonText}>🏪 Все магазины</Text>
+          <Text style={styles.controlButtonText}>🏪 Bütün Mağazalar</Text>
         </TouchableOpacity>
       </View>
 
@@ -381,7 +381,7 @@ const MapScreen = ({ navigation }) => {
                     source={{ uri: `${API_CONFIG.BASE_URL}/media/${selectedShop.picture}` }} 
                     style={styles.modalImage}
                     resizeMode="cover"
-                    onError={(error) => console.log('Modal image error:', error)}
+                    onError={(error) => console.log('Modal şəkil xətası:', error)}
                   />
                 )}
                 <Text style={styles.modalTitle}>{selectedShop.name}</Text>
@@ -389,14 +389,14 @@ const MapScreen = ({ navigation }) => {
                   {selectedShop.description}
                 </Text>
                 <Text style={styles.modalCategory}>
-                  {getCategoryIcon(selectedShop.category?.name)} {selectedShop.category?.name || 'Магазин'}
+                  {getCategoryIcon(selectedShop.category?.name)} {selectedShop.category?.name || 'Mağaza'}
                 </Text>
                 <Text style={styles.modalAddress}>
                   📍 {selectedShop.address}
                 </Text>
                 
                 <View style={styles.modalInfo}>
-                  <Text style={styles.modalInfoTitle}>📍 Координаты:</Text>
+                  <Text style={styles.modalInfoTitle}>📍 Koordinatlar:</Text>
                   <Text style={styles.modalInfoText}>
                     {parseFloat(selectedShop.location.latitude).toFixed(4)}, {parseFloat(selectedShop.location.longitude).toFixed(4)}
                   </Text>
@@ -407,13 +407,13 @@ const MapScreen = ({ navigation }) => {
                     style={styles.modalButton}
                     onPress={() => handleShopPress(selectedShop)}
                   >
-                    <Text style={styles.modalButtonText}>👀 Смотреть товары</Text>
+                    <Text style={styles.modalButtonText}>👀 Məhsulaları baxın</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.closeButton}
                     onPress={() => setModalVisible(false)}
                   >
-                    <Text style={styles.closeButtonText}>Закрыть</Text>
+                    <Text style={styles.closeButtonText}>Bağla</Text>
                   </TouchableOpacity>
                 </View>
               </>

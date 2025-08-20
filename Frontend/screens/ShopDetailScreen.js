@@ -40,8 +40,8 @@ const ShopDetailScreen = ({ route, navigation }) => {
         setShopWithProducts(response.data);
       }
     } catch (error) {
-      console.error('Error fetching shop details:', error);
-      Alert.alert('Ошибка', 'Не удалось загрузить детали магазина');
+      console.error('Mağaza detallarını yükləmə xətası:', error);
+      Alert.alert('Xəta', 'Mağaza detalları yüklənə bilmədi');
     } finally {
       setIsLoading(false);
     }
@@ -69,7 +69,7 @@ const ShopDetailScreen = ({ route, navigation }) => {
     
     // Если путь уже содержит полный URL, возвращаем его как есть
     if (picturePath.startsWith('http://') || picturePath.startsWith('https://')) {
-      console.log('Image URL for shop/product (already full):', picturePath);
+      console.log('Mağaza/məhsul üçün şəkil URL-i (artıq tam):', picturePath);
       return picturePath;
     }
     
@@ -84,7 +84,7 @@ const ShopDetailScreen = ({ route, navigation }) => {
       fullUrl = `${API_CONFIG.BASE_URL}/media/product_pictures/${cleanPath}`;
     }
     
-    console.log('Image URL for shop/product (constructed):', fullUrl);
+    console.log('Mağaza/məhsul üçün şəkil URL-i (quruldu):', fullUrl);
     return fullUrl;
   };
 
@@ -133,7 +133,7 @@ const ShopDetailScreen = ({ route, navigation }) => {
           {item.description}
         </Text>
         <View style={styles.productDetails}>
-          <Text style={styles.productPrice}>💰 {item.price} ₽</Text>
+          <Text style={styles.productPrice}>💰 {item.price} ₼</Text>
           <Text style={styles.productQuantity}>📦 {item.quantity} шт</Text>
         </View>
       </View>
@@ -158,7 +158,7 @@ const ShopDetailScreen = ({ route, navigation }) => {
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
-            <Text style={styles.backButtonText}>← Назад</Text>
+            <Text style={styles.backButtonText}>← Back</Text>
           </TouchableOpacity>
           
                      <View style={styles.shopImageContainer}>
@@ -168,9 +168,9 @@ const ShopDetailScreen = ({ route, navigation }) => {
                    source={{ uri: getImageUrl(shop.picture) }}
                    style={styles.shopImage}
                    resizeMode="cover"
-                   onLoadStart={() => console.log('🔄 Загрузка изображения магазина:', shop.name)}
-                   onLoad={() => console.log('✅ Изображение магазина загружено:', shop.name)}
-                   onError={(error) => console.log('❌ Ошибка загрузки изображения магазина:', shop.name, error)}
+                   onLoadStart={() => console.log('🔄 Loading shop image:', shop.name)}
+                   onLoad={() => console.log('✅ Shop image loaded:', shop.name)}
+                   onError={(error) => console.log('❌ Error loading shop image:', shop.name, error)}
                  />
                  
                </>
@@ -199,7 +199,7 @@ const ShopDetailScreen = ({ route, navigation }) => {
 
         {/* Products Section */}
         <View style={styles.productsSection}>
-          <Text style={styles.productsTitle}>🍽️ Меню</Text>
+          <Text style={styles.productsTitle}>🍽️ Menu</Text>
           {shopWithProducts?.products && shopWithProducts.products.length > 0 ? (
             <FlatList
               data={shopWithProducts.products}
@@ -210,8 +210,8 @@ const ShopDetailScreen = ({ route, navigation }) => {
             />
           ) : (
             <View style={styles.emptyProductsContainer}>
-              <Text style={styles.emptyProductsText}>🍽️ Продукты не найдены</Text>
-              <Text style={styles.emptyProductsSubtext}>В этом магазине пока нет доступных продуктов</Text>
+              <Text style={styles.emptyProductsText}>🍽️ Products not found</Text>
+              <Text style={styles.emptyProductsSubtext}>No products available in this shop yet</Text>
             </View>
           )}
         </View>

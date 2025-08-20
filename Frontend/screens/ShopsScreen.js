@@ -35,13 +35,13 @@ const ShopsScreen = ({ navigation }) => {
       
       // Если данные уже есть и не требуется принудительное обновление, пропускаем загрузку
       if (!forceRefresh && shops.length > 0 && !hasLoadedRef.current) {
-        console.log('📱 Shops already loaded, skipping fetch');
+        console.log('📱 Mağazalar artıq yüklənib, yükləmə atlanır');
         return;
       }
       
       // Проверяем, не делали ли мы запрос недавно (защита от спама)
       if (!forceRefresh && now - lastFetchTimeRef.current < 5000) { // 5 секунд
-        console.log('⚠️ Request made recently, skipping...');
+        console.log('⚠️ Son zamanlarda sorğu göndərilib, atlanır...');
         return;
       }
       
@@ -49,8 +49,8 @@ const ShopsScreen = ({ navigation }) => {
       lastFetchTimeRef.current = now;
       
       if (!token) {
-        console.error('❌ No token available for shops request');
-        Alert.alert('Ошибка', 'Токен авторизации не найден');
+        console.error('❌ Mağaza sorğusu üçün token yoxdur');
+        Alert.alert('Xəta', 'Avtorizasiya tokeni tapılmadı');
         return;
       }
       
@@ -69,28 +69,28 @@ const ShopsScreen = ({ navigation }) => {
         const uniqueCategories = [...new Set(response.data.map(shop => shop.category))];
         setCategories(['all', ...uniqueCategories]);
         
-        console.log(`✅ Loaded ${response.data.length} shops successfully`);
+        console.log(`✅ ${response.data.length} mağaza uğurla yükləndi`);
       }
     } catch (error) {
-      console.error('❌ Error fetching shops:', error);
-      console.error('📊 Error response:', error.response?.data);
-      console.error('🔢 Error status:', error.response?.status);
+      console.error('❌ Mağazaları yükləmə xətası:', error);
+      console.error('📊 Xəta cavabı:', error.response?.data);
+      console.error('🔢 Xəta statusu:', error.response?.status);
       
       // Если токен истек, пытаемся обновить его
       if (error.response?.status === 401 && error.response?.data?.code === 'token_not_valid') {
-        console.log('🔄 Token expired, attempting to refresh...');
+        console.log('🔄 Token vaxtı keçib, yeniləmə cəhdi...');
         const refreshSuccess = await refreshToken();
         
         if (refreshSuccess) {
-          console.log('✅ Token refreshed, retrying shops request...');
+          console.log('✅ Token yeniləndi, mağaza sorğusu təkrarlanır...');
           // Повторяем запрос с новым токеном, но не перезагружаем изображения
           return fetchShops(false);
         } else {
-          console.log('❌ Failed to refresh token, user needs to login again');
-          Alert.alert('Ошибка', 'Сессия истекла. Пожалуйста, войдите снова.');
+          console.log('❌ Token yenilənmədi, istifadəçi yenidən daxil olmalıdır');
+          Alert.alert('Xəta', 'Sessiya vaxtı keçib. Yenidən daxil olun.');
         }
       } else {
-        Alert.alert('Ошибка', 'Не удалось загрузить магазины');
+        Alert.alert('Xəta', 'Mağazalar yüklənə bilmədi');
       }
     } finally {
       setIsLoading(false);
@@ -209,7 +209,7 @@ const ShopsScreen = ({ navigation }) => {
         styles.categoryText,
         selectedCategory === item && styles.selectedCategoryText
       ]}>
-        {item === 'all' ? 'Все' : getCategoryIcon(item) + ' ' + item}
+        {item === 'all' ? 'Hamısı' : getCategoryIcon(item) + ' ' + item}
       </Text>
     </TouchableOpacity>
   );
@@ -234,14 +234,14 @@ const ShopsScreen = ({ navigation }) => {
                 resizeMode="cover"
                 onLoadStart={() => {
                   if (!isImageCached(getImageUrl(item.picture))) {
-                    console.log('🔄 Загрузка изображения для:', item.name);
+                    console.log('🔄 Şəkil yüklənir:', item.name);
                   }
                 }}
                 onLoad={() => {
                   const imageUrl = getImageUrl(item.picture);
                   if (!isImageCached(imageUrl)) {
                     addImageToCache(imageUrl);
-                    console.log('✅ Изображение загружено для:', item.name);
+                    console.log('✅ Şəkil yükləndi:', item.name);
                   }
                 }}
                 onError={(error) => handleImageError(item.id, item.picture, error)}
@@ -280,7 +280,7 @@ const ShopsScreen = ({ navigation }) => {
     return (
       <SafeAreaView style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#2E7D32" />
-        <Text style={styles.loadingText}>Загружаем магазины... 🏪</Text>
+        <Text style={styles.loadingText}>Mağazalar yüklənir... 🏪</Text>
       </SafeAreaView>
     );
   }
@@ -289,19 +289,19 @@ const ShopsScreen = ({ navigation }) => {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>🏪 Магазины и рестораны</Text>
+          <Text style={styles.headerTitle}>🏪 Mağazalar və Restoranlar</Text>
         </View>
         <View style={styles.noAuthContainer}>
           <Text style={styles.noAuthIcon}>🔐</Text>
-          <Text style={styles.noAuthTitle}>Требуется авторизация</Text>
+          <Text style={styles.noAuthTitle}>Avtorizasiya Lazımdır</Text>
           <Text style={styles.noAuthText}>
-            Для просмотра магазинов необходимо войти в систему
+            Mağazaları görmək üçün daxil olmalısınız
           </Text>
           <TouchableOpacity
             style={styles.loginButton}
             onPress={() => navigation.navigate('Login')}
           >
-            <Text style={styles.loginButtonText}>Войти в систему</Text>
+            <Text style={styles.loginButtonText}>Sistemə daxil ol</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -312,7 +312,7 @@ const ShopsScreen = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
              {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>🏪 Магазины и рестораны</Text>
+        <Text style={styles.headerTitle}>🏪 Mağazalar və Restoranlar</Text>
       </View>
 
       {/* Categories */}
@@ -343,8 +343,8 @@ const ShopsScreen = ({ navigation }) => {
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>🏪 Магазины не найдены</Text>
-            <Text style={styles.emptySubtext}>Попробуйте выбрать другую категорию</Text>
+            <Text style={styles.emptyText}>🏪 Mağaza tapılmadı</Text>
+            <Text style={styles.emptySubtext}>Başqa kateqoriya seçməyə çalışın</Text>
           </View>
         }
       />

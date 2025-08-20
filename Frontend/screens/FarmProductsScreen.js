@@ -37,7 +37,7 @@ const ProductCard = ({ product, onPress, onAddToCart, imageCache, addImageToCach
             }
           }}
           onError={() => {
-            console.log('❌ Ошибка загрузки изображения для:', product.name);
+            console.log('❌ Şəkil yükləmə xətası:', product.name);
           }}
         />
       ) : (
@@ -55,7 +55,7 @@ const ProductCard = ({ product, onPress, onAddToCart, imageCache, addImageToCach
         </Text>
       )}
       <View style={styles.productFooter}>
-        <Text style={styles.productPrice}>💰 {product.price} ₽</Text>
+        <Text style={styles.productPrice}>💰 {product.price} ₼</Text>
         <TouchableOpacity 
           style={styles.addButton}
           onPress={() => onAddToCart(product)}
@@ -115,10 +115,10 @@ const FarmProductsScreen = ({ route, navigation }) => {
   };
 
   const categories = [
-    { id: 'all', name: 'Все', icon: '🌾' },
-    { id: 'crop', name: 'Урожай', icon: '🌱' },
-    { id: 'item', name: 'Товары', icon: '📦' },
-    { id: 'machinery', name: 'Техника', icon: '🚜' },
+    { id: 'all', name: 'All', icon: '🌾' },
+    { id: 'crop', name: 'Crops', icon: '🌱' },
+    { id: 'item', name: 'Items', icon: '📦' },
+    { id: 'machinery', name: 'Machinery', icon: '🚜' },
   ];
 
   useEffect(() => {
@@ -155,7 +155,7 @@ const FarmProductsScreen = ({ route, navigation }) => {
       setFilteredProducts(productsData);
     } catch (error) {
       console.error('❌ Error loading farm products:', error);
-      Alert.alert('Ошибка', 'Не удалось загрузить продукты фермы');
+      Alert.alert('Error', 'Failed to load farm products');
     } finally {
       setIsLoading(false);
     }
@@ -194,7 +194,7 @@ const FarmProductsScreen = ({ route, navigation }) => {
       farmName: farm.name,
       picture: product.image
     });
-    Alert.alert('Успех', 'Товар добавлен в корзину');
+    Alert.alert('Success', 'Item added to cart');
   };
 
   const handleAddToCartFromModal = () => {
@@ -211,11 +211,11 @@ const FarmProductsScreen = ({ route, navigation }) => {
       });
       
       Alert.alert(
-        'Успешно!', 
-        `${selectedProduct.name} добавлен в корзину (${quantity} шт.)`,
+        'Success!', 
+        `${selectedProduct.name} added to cart (${quantity} pcs)`,
         [
-          { text: 'Продолжить покупки', onPress: () => setModalVisible(false) },
-          { text: 'Перейти в корзину', onPress: () => navigation.navigate('CartTab') }
+          { text: 'Continue Shopping', onPress: () => setModalVisible(false) },
+          { text: 'Go to Cart', onPress: () => navigation.navigate('CartTab') }
         ]
       );
       
@@ -257,7 +257,7 @@ const FarmProductsScreen = ({ route, navigation }) => {
     return (
       <SafeAreaView style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#2E7D32" />
-        <Text style={styles.loadingText}>Загружаем продукты фермы... 🌾</Text>
+        <Text style={styles.loadingText}>Loading farm products... 🌾</Text>
       </SafeAreaView>
     );
   }
@@ -273,10 +273,10 @@ const FarmProductsScreen = ({ route, navigation }) => {
           <Text style={styles.backButtonText}>←</Text>
         </TouchableOpacity>
         <View style={styles.headerContent}>
-          <Text style={styles.headerTitle}>🌾 Продукты фермы</Text>
+          <Text style={styles.headerTitle}>🌾 Farm Products</Text>
           <Text style={styles.farmName}>{farm.name}</Text>
           <Text style={styles.headerSubtitle}>
-            {filteredProducts.length} товаров доступно
+            {filteredProducts.length} products available
           </Text>
         </View>
       </View>
@@ -296,9 +296,9 @@ const FarmProductsScreen = ({ route, navigation }) => {
       {filteredProducts.length === 0 && !isLoading && (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyIcon}>🌾</Text>
-          <Text style={styles.emptyText}>Продукты не найдены</Text>
+          <Text style={styles.emptyText}>Products not found</Text>
           <Text style={styles.emptySubtext}>
-            В этой категории пока нет товаров
+            No products in this category yet
           </Text>
         </View>
       )}
@@ -345,14 +345,14 @@ const FarmProductsScreen = ({ route, navigation }) => {
                     source={{ 
                       uri: selectedProduct.image.startsWith('http') 
                         ? selectedProduct.image 
-                        : `http://192.168.1.70:8000/media/${selectedProduct.image}` 
+                        : `https://thequtt-9nuq.onrender.com/media/${selectedProduct.image}` 
                     }}
                     style={styles.modalImage}
                     resizeMode="cover"
                     onLoad={() => {
                       const imageUrl = selectedProduct.image.startsWith('http') 
                         ? selectedProduct.image 
-                        : `http://192.168.1.70:8000/media/${selectedProduct.image}`;
+                        : `https://thequtt-9nuq.onrender.com/media/${selectedProduct.image}`;
                       if (!isImageCached(imageUrl)) {
                         addImageToCache(imageUrl);
                       }
@@ -374,7 +374,7 @@ const FarmProductsScreen = ({ route, navigation }) => {
                 )}
 
                 <View style={styles.modalInfo}>
-                  <Text style={styles.modalPrice}>💰 Цена: {selectedProduct.price} ₽</Text>
+                  <Text style={styles.modalPrice}>💰 Цена: {selectedProduct.price} ₼</Text>
                   <Text style={styles.modalType}>🏷️ Тип: {selectedProduct.type}</Text>
                 </View>
 
@@ -401,8 +401,8 @@ const FarmProductsScreen = ({ route, navigation }) => {
                 </View>
 
                 <View style={styles.modalTotal}>
-                  <Text style={styles.totalLabel}>Итого:</Text>
-                  <Text style={styles.totalValue}>{selectedProduct.price * quantity} ₽</Text>
+                  <Text style={styles.totalLabel}>Total:</Text>
+                  <Text style={styles.totalValue}>{selectedProduct.price * quantity} ₼</Text>
                 </View>
 
                 <TouchableOpacity
@@ -410,7 +410,7 @@ const FarmProductsScreen = ({ route, navigation }) => {
                   onPress={handleAddToCartFromModal}
                 >
                   <Text style={styles.addToCartButtonText}>
-                    🛒 Добавить в корзину
+                    🛒 Add to Cart
                   </Text>
                 </TouchableOpacity>
               </>

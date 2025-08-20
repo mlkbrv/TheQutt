@@ -50,14 +50,14 @@ const ShopOwnerScreen = ({ navigation }) => {
         `${API_CONFIG.BASE_URL}/products/my-shops/`,
         { headers: getAuthHeaders(token) }
       );
-      console.log('🏪 Мои магазины:', response.data);
+      console.log('🏪 Mənim mağazalarım:', response.data);
       setMyShops(response.data);
     } catch (error) {
-      console.error('❌ Ошибка загрузки магазинов:', error);
+      console.error('❌ Mağazaları yükləmə xətası:', error);
       if (error.response?.status === 403) {
-        Alert.alert('Доступ запрещен', 'У вас нет прав для просмотра магазинов');
+        Alert.alert('Giriş qadağandır', 'Mağazaları görmək üçün hüququunuz yoxdur');
       } else {
-        Alert.alert('Ошибка', 'Не удалось загрузить магазины');
+        Alert.alert('Xəta', 'Mağazalar yüklənə bilmədi');
       }
     } finally {
       setIsLoading(false);
@@ -72,8 +72,8 @@ const ShopOwnerScreen = ({ navigation }) => {
       );
       setShopProducts(response.data);
     } catch (error) {
-      console.error('❌ Ошибка загрузки продуктов:', error);
-      Alert.alert('Ошибка', 'Не удалось загрузить продукты магазина');
+      console.error('❌ Məhsulları yükləmə xətası:', error);
+      Alert.alert('Xəta', 'Mağaza məhsulları yüklənə bilmədi');
     }
   };
 
@@ -88,7 +88,7 @@ const ShopOwnerScreen = ({ navigation }) => {
       // Запрашиваем разрешение на доступ к галерее
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== 'granted') {
-        Alert.alert('Разрешение не получено', 'Нужно разрешение для доступа к галерее');
+        Alert.alert('İcazə verilmədi', 'Qalereyaya giriş üçün icazə lazımdır');
         return;
       }
 
@@ -105,8 +105,8 @@ const ShopOwnerScreen = ({ navigation }) => {
         setNewProduct({...newProduct, picture: result.assets[0].uri});
       }
     } catch (error) {
-      console.error('❌ Ошибка выбора изображения:', error);
-      Alert.alert('Ошибка', 'Не удалось выбрать изображение');
+      console.error('❌ İmatin seçilmə xətası:', error);
+      Alert.alert('Xəta', 'İmat seçə bilmədiniz');
     }
   };
 
@@ -115,7 +115,7 @@ const ShopOwnerScreen = ({ navigation }) => {
       // Запрашиваем разрешение на доступ к камере
       const { status } = await ImagePicker.requestCameraPermissionsAsync();
       if (status !== 'granted') {
-        Alert.alert('Разрешение не получено', 'Нужно разрешение для доступа к камере');
+        Alert.alert('İcazə verilmədi', 'Kameraya giriş üçün icazə lazımdır');
         return;
       }
 
@@ -131,8 +131,8 @@ const ShopOwnerScreen = ({ navigation }) => {
         setNewProduct({...newProduct, picture: result.assets[0].uri});
       }
     } catch (error) {
-      console.error('❌ Ошибка съемки фото:', error);
-      Alert.alert('Ошибка', 'Не удалось сделать фото');
+      console.error('❌ Fotoçekmə xətası:', error);
+      Alert.alert('Xəta', 'Fotoçekmə edə bilmədiniz');
     }
   };
 
@@ -163,11 +163,11 @@ const ShopOwnerScreen = ({ navigation }) => {
         }
       );
 
-      console.log('✅ Изображение загружено:', response.data);
+      console.log('✅ Şəkil yükləndi:', response.data);
       return response.data.picture_path;
     } catch (error) {
-      console.error('❌ Ошибка загрузки изображения:', error);
-      throw new Error('Не удалось загрузить изображение');
+      console.error('❌ Şəkil yüklənmə xətası:', error);
+      throw new Error('Şəkil yüklənmədi');
     } finally {
       setUploadingImage(false);
     }
@@ -175,7 +175,7 @@ const ShopOwnerScreen = ({ navigation }) => {
 
   const handleAddProduct = async () => {
     if (!newProduct.name || !newProduct.price || !newProduct.quantity) {
-      Alert.alert('Ошибка', 'Заполните все обязательные поля');
+      Alert.alert('Xəta', 'Bütün tələb olunan sahələri doldurun');
       return;
     }
 
@@ -187,7 +187,7 @@ const ShopOwnerScreen = ({ navigation }) => {
         try {
           picturePath = await uploadImage(imageUri);
         } catch (error) {
-          Alert.alert('Ошибка', 'Не удалось загрузить изображение. Попробуйте еще раз.');
+          Alert.alert('Xəta', 'Şəkil yüklənmədə xəta baş verdi. Yenidən cəhd edin.');
           return;
         }
       }
@@ -208,8 +208,8 @@ const ShopOwnerScreen = ({ navigation }) => {
         { headers: getAuthHeaders(token) }
       );
 
-      console.log('✅ Продукт добавлен:', response.data);
-      Alert.alert('Успех', 'Продукт успешно добавлен в магазин');
+      console.log('✅ Məhsul əlavə edildi:', response.data);
+      Alert.alert('Uğurlu', 'Məhsul uğurla əlavə edildi');
       
       // Обновляем список продуктов
       loadShopProducts(selectedShop.id);
@@ -227,8 +227,8 @@ const ShopOwnerScreen = ({ navigation }) => {
       
       setProductModalVisible(false);
     } catch (error) {
-      console.error('❌ Ошибка добавления продукта:', error);
-      Alert.alert('Ошибка', 'Не удалось добавить продукт');
+      console.error('❌ Məhsul əlavə etmə xətası:', error);
+      Alert.alert('Xəta', 'Məhsul əlavə edilmədi');
     }
   };
 
@@ -255,7 +255,7 @@ const ShopOwnerScreen = ({ navigation }) => {
       <View style={styles.shopFooter}>
         <Text style={styles.shopAddress}>📍 {item.address}</Text>
         <Text style={styles.shopStatus}>
-          {item.is_active ? '🟢 Активен' : '🔴 Неактивен'}
+          {item.is_active ? '🟢 Aktiv' : '🔴 Aktiv deyil'}
         </Text>
       </View>
     </TouchableOpacity>
@@ -269,8 +269,8 @@ const ShopOwnerScreen = ({ navigation }) => {
           {item.description}
         </Text>
         <View style={styles.productDetails}>
-          <Text style={styles.productPrice}>💰 {item.price} ₽</Text>
-          <Text style={styles.productQuantity}>📦 {item.quantity} шт.</Text>
+          <Text style={styles.productPrice}>💰 {item.price} ₼</Text>
+          <Text style={styles.productQuantity}>📦 {item.quantity} əd.</Text>
           <Text style={styles.productCategory}>🏷️ {item.category}</Text>
         </View>
       </View>
@@ -281,7 +281,7 @@ const ShopOwnerScreen = ({ navigation }) => {
     return (
       <SafeAreaView style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#4CAF50" />
-        <Text style={styles.loadingText}>Загружаем ваши магазины... 🏪</Text>
+        <Text style={styles.loadingText}>Mağazalarınızı yükləyirəm... 🏪</Text>
       </SafeAreaView>
     );
   }
@@ -290,20 +290,20 @@ const ShopOwnerScreen = ({ navigation }) => {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>🏪 Управление магазинами</Text>
+          <Text style={styles.headerTitle}>🏪 Mağaza idarəetmə</Text>
         </View>
         
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyIcon}>🏪</Text>
-          <Text style={styles.emptyTitle}>У вас пока нет магазинов</Text>
+          <Text style={styles.emptyTitle}>Sizin mağazalarınız yoxdur</Text>
           <Text style={styles.emptyText}>
-            Создайте свой первый магазин, чтобы начать продавать товары!
+            İlk mağazanızı yaradın, məhsulları satın alın!
           </Text>
           <TouchableOpacity
             style={styles.createShopButton}
             onPress={() => navigation.navigate('CreateShop')}
           >
-            <Text style={styles.createShopButtonText}>➕ Создать магазин</Text>
+            <Text style={styles.createShopButtonText}>➕ Mağaza yaradın</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -313,9 +313,9 @@ const ShopOwnerScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>🏪 Управление магазинами</Text>
+        <Text style={styles.headerTitle}>🏪 Mağaza idarəetmə</Text>
         <Text style={styles.headerSubtitle}>
-          {myShops.length} магазин(ов) под вашим управлением
+          {myShops.length} mağaza(lar) sizin idarə etdiyiniz
         </Text>
       </View>
 
@@ -360,19 +360,19 @@ const ShopOwnerScreen = ({ navigation }) => {
                 </Text>
 
                 <View style={styles.modalInfo}>
-                  <Text style={styles.modalInfoText}>📍 Адрес: {selectedShop.address}</Text>
-                  <Text style={styles.modalInfoText}>📂 Категория: {selectedShop.category}</Text>
-                  <Text style={styles.modalInfoText}>🕒 Часы работы: {selectedShop.opening_hours || 'Не указаны'}</Text>
+                  <Text style={styles.modalInfoText}>📍 Ünvan: {selectedShop.address}</Text>
+                  <Text style={styles.modalInfoText}>📂 Kateqoriya: {selectedShop.category}</Text>
+                  <Text style={styles.modalInfoText}>🕒 İş vaxtları: {selectedShop.opening_hours || 'Təyin edilməyib'}</Text>
                 </View>
 
                 <View style={styles.productsSection}>
                   <View style={styles.productsHeader}>
-                    <Text style={styles.productsTitle}>📦 Продукты магазина</Text>
+                    <Text style={styles.productsTitle}>📦 Mağaza məhsulları</Text>
                     <TouchableOpacity
                       style={styles.addProductButton}
                       onPress={() => setProductModalVisible(true)}
                     >
-                      <Text style={styles.addProductButtonText}>➕ Добавить</Text>
+                      <Text style={styles.addProductButtonText}>➕ Əlavə et</Text>
                     </TouchableOpacity>
                   </View>
 
@@ -386,7 +386,7 @@ const ShopOwnerScreen = ({ navigation }) => {
                     />
                   ) : (
                     <Text style={styles.noProductsText}>
-                      В магазине пока нет продуктов
+                      Mağazada məhsul yoxdur
                     </Text>
                   )}
                 </View>
@@ -406,7 +406,7 @@ const ShopOwnerScreen = ({ navigation }) => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>➕ Добавить продукт</Text>
+              <Text style={styles.modalTitle}>➕ Məhsul əlavə et</Text>
               <TouchableOpacity
                 style={styles.closeModalButton}
                 onPress={() => setProductModalVisible(false)}
@@ -416,25 +416,25 @@ const ShopOwnerScreen = ({ navigation }) => {
             </View>
 
             <ScrollView style={styles.productForm}>
-              <Text style={styles.formLabel}>Название продукта *</Text>
+              <Text style={styles.formLabel}>Məhsulun adı *</Text>
               <TextInput
                 style={styles.formInput}
                 value={newProduct.name}
                 onChangeText={(text) => setNewProduct({...newProduct, name: text})}
-                placeholder="Введите название продукта"
+                placeholder="Məhsulun adını daxil edin"
               />
 
-              <Text style={styles.formLabel}>Описание</Text>
+              <Text style={styles.formLabel}>Təsvir</Text>
               <TextInput
                 style={styles.formInput}
                 value={newProduct.description}
                 onChangeText={(text) => setNewProduct({...newProduct, description: text})}
-                placeholder="Описание продукта"
+                placeholder="Məhsulun təsviri"
                 multiline
                 numberOfLines={3}
               />
 
-              <Text style={styles.formLabel}>Цена (₽) *</Text>
+              <Text style={styles.formLabel}>Qiymət (₼) *</Text>
               <TextInput
                 style={styles.formInput}
                 value={newProduct.price}
@@ -443,7 +443,7 @@ const ShopOwnerScreen = ({ navigation }) => {
                 keyboardType="numeric"
               />
 
-              <Text style={styles.formLabel}>Количество *</Text>
+              <Text style={styles.formLabel}>Miqdar *</Text>
               <TextInput
                 style={styles.formInput}
                 value={newProduct.quantity}
@@ -452,15 +452,15 @@ const ShopOwnerScreen = ({ navigation }) => {
                 keyboardType="numeric"
               />
 
-              <Text style={styles.formLabel}>Категория</Text>
+              <Text style={styles.formLabel}>Kateqoriya</Text>
               <TextInput
                 style={styles.formInput}
                 value={newProduct.category}
                 onChangeText={(text) => setNewProduct({...newProduct, category: text})}
-                placeholder="Например: пицца, напитки"
+                placeholder="Məsələn: pizza, içki"
               />
 
-              <Text style={styles.formLabel}>Фотография продукта</Text>
+              <Text style={styles.formLabel}>Məhsulun şəkli</Text>
               
               {/* Превью выбранного изображения */}
               {imageUri && (
@@ -484,14 +484,14 @@ const ShopOwnerScreen = ({ navigation }) => {
                   style={styles.imageButton}
                   onPress={pickImage}
                 >
-                  <Text style={styles.imageButtonText}>📁 Выбрать из галереи</Text>
+                  <Text style={styles.imageButtonText}>📁 Qalereyadan seçin</Text>
                 </TouchableOpacity>
                 
                 <TouchableOpacity
                   style={styles.imageButton}
                   onPress={takePhoto}
                 >
-                  <Text style={styles.imageButtonText}>📷 Сделать фото</Text>
+                  <Text style={styles.imageButtonText}>�� Kamera ilə çəkin</Text>
                 </TouchableOpacity>
               </View>
 
@@ -503,10 +503,10 @@ const ShopOwnerScreen = ({ navigation }) => {
                 {uploadingImage ? (
                   <View style={styles.loadingButton}>
                     <ActivityIndicator size="small" color="white" />
-                    <Text style={styles.submitButtonText}>Загружаем изображение...</Text>
+                    <Text style={styles.submitButtonText}>Şəkil yüklənir...</Text>
                   </View>
                 ) : (
-                  <Text style={styles.submitButtonText}>✅ Добавить продукт</Text>
+                  <Text style={styles.submitButtonText}>✅ Məhsul əlavə et</Text>
                 )}
               </TouchableOpacity>
             </ScrollView>

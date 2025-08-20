@@ -32,14 +32,14 @@ export const useUserRole = () => {
       setIsShopOwner(shops.length > 0);
       setMyShops(shops);
       
-      console.log('🔍 User role check:', {
+      console.log('🔍 İstifadəçi rolu yoxlanıldı:', {
         isShopOwner: shops.length > 0,
         shopsCount: shops.length,
         shops: shops.map(s => ({ id: s.id, name: s.name }))
       });
       
     } catch (error) {
-      console.log('🔍 User is not a shop owner or error occurred:', error.message);
+      console.log('🔍 İstifadəçi mağaza sahibi deyil və ya xəta baş verdi:', error.message);
       setIsShopOwner(false);
       setMyShops([]);
     } finally {

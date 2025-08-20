@@ -38,8 +38,8 @@ const ProfileScreen = ({ navigation }) => {
         setUserProfile(response.data);
       }
     } catch (error) {
-      console.error('Error fetching user profile:', error);
-      Alert.alert('Ошибка', 'Не удалось загрузить профиль');
+      console.error('İstifadəçi profilini yükləmə xətası:', error);
+      Alert.alert('Xəta', 'Profil yüklənə bilmədi');
     } finally {
       setIsLoading(false);
     }
@@ -47,22 +47,22 @@ const ProfileScreen = ({ navigation }) => {
 
   const handleLogout = async () => {
     Alert.alert(
-      'Выход',
-      'Вы уверены, что хотите выйти?',
+      'Çıxış',
+      'Çıxmaq istədiyinizə əminsiniz?',
       [
         {
-          text: 'Отмена',
+          text: 'Ləğv et',
           style: 'cancel',
         },
         {
-          text: 'Выйти',
+          text: 'Çıx',
           style: 'destructive',
           onPress: async () => {
             try {
               await logout();
               navigation.navigate('Login');
             } catch (error) {
-              console.error('Error during logout:', error);
+              console.error('Çıxış zamanı xəta:', error);
             }
           },
         },
@@ -86,7 +86,7 @@ const ProfileScreen = ({ navigation }) => {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>👤 Профиль</Text>
+          <Text style={styles.headerTitle}>👤 Profil</Text>
           <TouchableOpacity 
             style={styles.cartButton}
             onPress={() => navigation.navigate('Cart')}
@@ -105,7 +105,7 @@ const ProfileScreen = ({ navigation }) => {
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <ActivityIndicator size="large" color="#4CAF50" />
           <Text style={{ marginTop: 16, fontSize: 16, color: '#666' }}>
-            Загружаем профиль... 👤
+            Profil yüklənir... 👤
           </Text>
         </View>
       </View>
@@ -117,7 +117,7 @@ const ProfileScreen = ({ navigation }) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>👤 Профиль</Text>
+          <Text style={styles.headerTitle}>👤 Profil</Text>
           <TouchableOpacity 
             style={styles.cartButton}
             onPress={() => navigation.navigate('Cart')}
@@ -150,15 +150,15 @@ const ProfileScreen = ({ navigation }) => {
             <Text style={styles.profileName}>
               {userProfile?.first_name && userProfile?.last_name
                 ? `${userProfile.first_name} ${userProfile.last_name}`
-                : 'Пользователь'
+                : 'İstifadəçi'
               }
             </Text>
-            <Text style={styles.profileEmail}>{userProfile?.email || 'Email не указан'}</Text>
+            <Text style={styles.profileEmail}>{userProfile?.email || 'Email göstərilməyib'}</Text>
           </View>
 
           <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
             <Ionicons name="log-out-outline" size={20} color="white" />
-            <Text style={styles.logoutButtonText}>Выйти</Text>
+            <Text style={styles.logoutButtonText}>Çıx</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

@@ -30,32 +30,32 @@ const OrdersScreen = ({ navigation }) => {
         `${API_CONFIG.BASE_URL}/orders/`,
         { headers: getAuthHeaders(token) }
       );
-      console.log('📋 Получены заказы:', response.data);
-      console.log('📊 Количество заказов:', response.data.length);
+      console.log('📋 Sifarişlər alındı:', response.data);
+      console.log('📊 Sifariş sayı:', response.data.length);
       if (response.data.length > 0) {
-        console.log('🔍 Первый заказ:', JSON.stringify(response.data[0], null, 2));
+        console.log('🔍 İlk sifariş:', JSON.stringify(response.data[0], null, 2));
       }
       setOrders(response.data);
     } catch (error) {
-      console.error('❌ Error fetching orders:', error);
-      console.error('📊 Error response:', error.response?.data);
-      console.error('🔢 Error status:', error.response?.status);
+      console.error('❌ Sifarişləri yükləmə xətası:', error);
+      console.error('📊 Xəta cavabı:', error.response?.data);
+      console.error('🔢 Xəta statusu:', error.response?.status);
       
       // Если токен истек, пытаемся обновить его
       if (error.response?.status === 401 && error.response?.data?.code === 'token_not_valid') {
-        console.log('🔄 Token expired, attempting to refresh...');
+        console.log('🔄 Token vaxtı keçib, yeniləmə cəhdi...');
         const refreshSuccess = await refreshToken();
         
         if (refreshSuccess) {
-          console.log('✅ Token refreshed, retrying orders request...');
+          console.log('✅ Token yeniləndi, sifariş sorğusu təkrarlanır...');
           // Повторяем запрос с новым токеном
           return fetchOrders();
         } else {
-          console.log('❌ Failed to refresh token, user needs to login again');
-          Alert.alert('Ошибка', 'Сессия истекла. Пожалуйста, войдите снова.');
+          console.log('❌ Token yenilənmədi, istifadəçi yenidən daxil olmalıdır');
+          Alert.alert('Xəta', 'Sessiya vaxtı keçib. Yenidən daxil olun.');
         }
       } else {
-        Alert.alert('Ошибка', 'Не удалось загрузить заказы');
+        Alert.alert('Xəta', 'Sifarişlər yüklənə bilmədi');
       }
     } finally {
       setLoading(false);
@@ -90,17 +90,17 @@ const OrdersScreen = ({ navigation }) => {
   const getStatusText = (status) => {
     switch (status) {
       case 'pending':
-        return 'Ожидает подтверждения';
+        return 'Təsdiq gözləyir';
       case 'confirmed':
-        return 'Подтвержден';
+        return 'Təsdiqləndi';
       case 'preparing':
-        return 'Готовится';
+        return 'Hazırlanır';
       case 'ready':
-        return 'Готов к выдаче';
+        return 'Götürməyə hazırdır';
       case 'delivered':
-        return 'Доставлен';
+        return 'Çatdırıldı';
       case 'cancelled':
-        return 'Отменен';
+        return 'Ləğv edildi';
       default:
         return status;
     }
@@ -112,21 +112,21 @@ const OrdersScreen = ({ navigation }) => {
       onPress={() => navigation.navigate('OrderDetail', { orderId: item.order_id })}
     >
       <View style={styles.orderHeader}>
-        <Text style={styles.orderNumber}>Заказ #{item.order_id}</Text>
+        <Text style={styles.orderNumber}>Sifariş #{item.order_id}</Text>
         <Text style={[styles.orderStatus, { color: getStatusColor(item.status) }]}>
           {getStatusText(item.status)}
         </Text>
       </View>
       
       <View style={styles.orderInfo}>
-        <Text style={styles.shopName}>🏪 {item.shop_names ? item.shop_names.join(', ') : 'Магазин'}</Text>
-        <Text style={styles.orderDate}>📅 {new Date(item.created_at).toLocaleDateString('ru-RU')}</Text>
-        <Text style={styles.orderTime}>🕐 {new Date(item.created_at).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</Text>
+        <Text style={styles.shopName}>🏪 {item.shop_names ? item.shop_names.join(', ') : 'Mağaza'}</Text>
+        <Text style={styles.orderDate}>📅 {new Date(item.created_at).toLocaleDateString('az-AZ')}</Text>
+        <Text style={styles.orderTime}>🕐 {new Date(item.created_at).toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit' })}</Text>
       </View>
 
       <View style={styles.orderFooter}>
-        <Text style={styles.orderTotal}>💰 Итого: {item.total_sum} ₽</Text>
-        <Text style={styles.itemsCount}>📦 {item.items ? item.items.length : 0} товаров</Text>
+        <Text style={styles.orderTotal}>💰 Ümumi: {item.total_sum} ₼</Text>
+        <Text style={styles.itemsCount}>📦 {item.items ? item.items.length : 0} məhsul</Text>
       </View>
     </TouchableOpacity>
   );
@@ -135,7 +135,7 @@ const OrdersScreen = ({ navigation }) => {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#4CAF50" />
-        <Text style={styles.loadingText}>Загрузка заказов...</Text>
+        <Text style={styles.loadingText}>Sifarişlər yüklənir...</Text>
       </View>
     );
   }
@@ -143,21 +143,21 @@ const OrdersScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>📋 Мои заказы</Text>
+        <Text style={styles.headerTitle}>📋 Mənim Sifarişlərim</Text>
       </View>
 
       {orders.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyIcon}>📋</Text>
-          <Text style={styles.emptyTitle}>У вас пока нет заказов</Text>
+          <Text style={styles.emptyTitle}>Hələ heç bir sifarişiniz yoxdur</Text>
           <Text style={styles.emptyText}>
-            Сделайте свой первый заказ в любом из наших магазинов!
+            Mağazalarımızdan ilk sifarişinizi verin!
           </Text>
                       <TouchableOpacity
               style={styles.shopButton}
               onPress={() => navigation.navigate('ShopsTab')}
             >
-            <Text style={styles.shopButtonText}>Перейти к магазинам</Text>
+            <Text style={styles.shopButtonText}>Mağazalara Get</Text>
           </TouchableOpacity>
         </View>
       ) : (

@@ -98,17 +98,17 @@ const MainTabNavigator = () => {
           <Tab.Screen 
             name="MyShops" 
             component={ShopOwnerStack}
-            options={{ title: 'Мои магазины' }}
+            options={{ title: 'Mənim Mağazalarım' }}
           />
           <Tab.Screen 
             name="ShopOrders" 
             component={ShopOwnerOrdersScreen}
-            options={{ title: 'Заказы магазинов' }}
+            options={{ title: 'Mağaza Sifarişləri' }}
           />
           <Tab.Screen 
             name="Profile" 
             component={ProfileStack}
-            options={{ title: 'Профиль' }}
+            options={{ title: 'Profil' }}
           />
         </>
       ) : (
@@ -117,27 +117,27 @@ const MainTabNavigator = () => {
           <Tab.Screen 
             name="Shops" 
             component={ShopsStack}
-            options={{ title: 'Магазины' }}
+            options={{ title: 'Mağazalar' }}
           />
           <Tab.Screen 
             name="Map" 
             component={MapStack}
-            options={{ title: 'Карта' }}
+            options={{ title: 'Xəritə' }}
           />
           <Tab.Screen 
             name="Cart" 
             component={CartScreen}
-            options={{ title: 'Корзина' }}
+            options={{ title: 'Səbət' }}
           />
           <Tab.Screen 
             name="Orders" 
             component={OrdersScreen}
-            options={{ title: 'Заказы' }}
+            options={{ title: 'Sifarişlər' }}
           />
           <Tab.Screen 
             name="Profile" 
             component={ProfileStack}
-            options={{ title: 'Профиль' }}
+            options={{ title: 'Profil' }}
           />
         </>
       )}

@@ -14,8 +14,8 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Приложению необходим доступ к местоположению для показа ближайших магазинов на карте",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "Приложению необходим доступ к местоположению для показа ближайших магазинов на карте"
+        "NSLocationWhenInUseUsageDescription": "The app needs access to location to show nearby shops on the map",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "The app needs access to location to show nearby shops on the map"
       }
     },
     "android": {
@@ -28,12 +28,12 @@
         "INTERNET"
       ],
       "usesCleartextTraffic": true,
-      "package": "com.emil_a.quttapp"
+      "package": "com.emil_a.quttappr"
     },
     "web": {},
     "extra": {
       "eas": {
-        "projectId": "af8fa39a-0726-4bcd-8150-41e704a6af0c"
+        "projectId": "3e51f736-7569-4afb-85d2-78df00d0220c"
       }
     }
   }

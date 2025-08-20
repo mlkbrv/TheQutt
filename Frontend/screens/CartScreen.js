@@ -47,11 +47,11 @@ const CartScreen = ({ navigation }) => {
 
   const handleRemoveItem = (itemId, shopId, itemName) => {
     Alert.alert(
-      'Удалить товар',
-      `Убрать "${itemName}" из корзины?`,
+      'Məhsulu Sil',
+      `"${itemName}" məhsulunu səbətdən silmək istəyirsiniz?`,
       [
-        { text: 'Отмена', style: 'cancel' },
-        { text: 'Удалить', onPress: () => removeFromCart(itemId, shopId), style: 'destructive' }
+        { text: 'Ləğv et', style: 'cancel' },
+        { text: 'Sil', onPress: () => removeFromCart(itemId, shopId), style: 'destructive' }
       ]
     );
   };
@@ -60,18 +60,18 @@ const CartScreen = ({ navigation }) => {
     if (cartItems.length === 0) return;
     
     Alert.alert(
-      'Очистить корзину',
-      'Убрать все товары из корзины?',
+      'Səbəti Təmizlə',
+      'Bütün məhsulları səbətdən silmək istəyirsiniz?',
       [
-        { text: 'Отмена', style: 'cancel' },
-        { text: 'Очистить', onPress: clearCart, style: 'destructive' }
+        { text: 'Ləğv et', style: 'cancel' },
+        { text: 'Təmizlə', onPress: clearCart, style: 'destructive' }
       ]
     );
   };
 
   const handlePlaceOrder = async () => {
     if (cartItems.length === 0) {
-      Alert.alert('Корзина пуста', 'Добавьте товары в корзину для оформления заказа');
+      Alert.alert('Səbət Boşdur', 'Sifariş vermək üçün səbətə məhsul əlavə edin');
       return;
     }
 
@@ -90,8 +90,8 @@ const CartScreen = ({ navigation }) => {
           }))
         };
 
-        console.log('📦 Отправляем заказ для магазина:', shopId);
-        console.log('📋 Данные заказа:', JSON.stringify(orderData, null, 2));
+        console.log('📦 Mağaza üçün sifariş göndərilir:', shopId);
+        console.log('📋 Sifariş məlumatları:', JSON.stringify(orderData, null, 2));
 
         await axios.post(
           `${API_CONFIG.BASE_URL}/orders/`,
@@ -105,31 +105,31 @@ const CartScreen = ({ navigation }) => {
       setOrderModalVisible(false);
       
       Alert.alert(
-        'Заказ оформлен! 🎉',
-        'Ваш заказ успешно создан. Ожидайте подтверждения от магазина.',
+        'Sifariş verildi! 🎉',
+        'Sifarişiniz uğurla yaradıldı. Mağazadan təsdiq gözləyin.',
         [
           { 
-            text: 'Отлично!', 
+            text: 'Əla!', 
             onPress: () => navigation.navigate('Shops') 
           }
         ]
       );
 
     } catch (error) {
-      console.error('Ошибка оформления заказа:', error);
-      let errorMessage = 'Не удалось оформить заказ';
+      console.error('Sifariş vermə xətası:', error);
+      let errorMessage = 'Sifariş verilə bilmədi';
       
       if (error.response) {
         if (error.response.status === 400) {
-          errorMessage = 'Проверьте данные заказа';
+          errorMessage = 'Sifariş məlumatlarını yoxlayın';
         } else if (error.response.status === 401) {
-          errorMessage = 'Необходимо войти в систему';
+          errorMessage = 'Sistemə daxil olmaq lazımdır';
         } else if (error.response.status === 403) {
-          errorMessage = 'Недостаточно прав для оформления заказа';
+          errorMessage = 'Sifariş vermək üçün kifayət qədər hüquq yoxdur';
         }
       }
       
-      Alert.alert('Ошибка', errorMessage);
+      Alert.alert('Xəta', errorMessage);
     } finally {
       setOrderLoading(false);
     }
@@ -154,7 +154,7 @@ const CartScreen = ({ navigation }) => {
       <View style={styles.itemInfo}>
         <Text style={styles.itemName}>{item.name}</Text>
         <Text style={styles.itemShop}>🏪 {item.shopName}</Text>
-        <Text style={styles.itemPrice}>💰 {item.price} ₽</Text>
+        <Text style={styles.itemPrice}>💰 {item.price} ₼</Text>
       </View>
 
       <View style={styles.itemControls}>
@@ -176,7 +176,7 @@ const CartScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.itemTotal}>{item.price * item.quantity} ₽</Text>
+        <Text style={styles.itemTotal}>{item.price * item.quantity} ₼</Text>
 
         <TouchableOpacity
           style={styles.removeButton}
@@ -198,21 +198,21 @@ const CartScreen = ({ navigation }) => {
           >
             <Text style={styles.backButtonText}>←</Text>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>🛒 Корзина</Text>
+          <Text style={styles.headerTitle}>🛒 Səbət</Text>
           <View style={styles.placeholder} />
         </View>
         
         <View style={styles.emptyContent}>
           <Text style={styles.emptyIcon}>🛒</Text>
-          <Text style={styles.emptyTitle}>Корзина пуста</Text>
+          <Text style={styles.emptyTitle}>Səbət Boşdur</Text>
           <Text style={styles.emptySubtitle}>
-            Добавьте товары из магазинов, чтобы оформить заказ
+            Sifariş vermək üçün mağazalardan məhsul əlavə edin
           </Text>
           <TouchableOpacity
             style={styles.browseButton}
             onPress={() => navigation.navigate('Shops')}
           >
-            <Text style={styles.browseButtonText}>🛍️ Перейти к магазинам</Text>
+            <Text style={styles.browseButtonText}>🛍️ Mağazalara Get</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -228,7 +228,7 @@ const CartScreen = ({ navigation }) => {
         >
           <Text style={styles.backButtonText}>←</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>🛒 Корзина</Text>
+        <Text style={styles.headerTitle}>🛒 Səbət</Text>
         <TouchableOpacity
           style={styles.clearButton}
           onPress={handleClearCart}
@@ -247,15 +247,15 @@ const CartScreen = ({ navigation }) => {
 
       <View style={styles.footer}>
         <View style={styles.totalContainer}>
-          <Text style={styles.totalLabel}>Итого:</Text>
-          <Text style={styles.totalValue}>{total} ₽</Text>
+          <Text style={styles.totalLabel}>Ümumi:</Text>
+          <Text style={styles.totalValue}>{total} ₼</Text>
         </View>
         
         <TouchableOpacity
           style={styles.orderButton}
           onPress={() => setOrderModalVisible(true)}
         >
-          <Text style={styles.orderButtonText}>📋 Оформить заказ</Text>
+          <Text style={styles.orderButtonText}>📋 Sifariş Ver</Text>
         </TouchableOpacity>
       </View>
 
@@ -268,7 +268,7 @@ const CartScreen = ({ navigation }) => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>📋 Подтверждение заказа</Text>
+            <Text style={styles.modalTitle}>📋 Sifariş Təsdiqi</Text>
             
             <ScrollView style={styles.orderSummary}>
               {Object.entries(getCartItemsByShop()).map(([shopId, shopData]) => (
@@ -278,7 +278,7 @@ const CartScreen = ({ navigation }) => {
                     <View key={index} style={styles.orderItem}>
                       <Text style={styles.orderItemName}>{item.name}</Text>
                       <Text style={styles.orderItemDetails}>
-                        {item.quantity} шт. × {item.price} ₽ = {item.quantity * item.price} ₽
+                        {item.quantity} ədəd × {item.price} ₼ = {item.quantity * item.price} ₼
                       </Text>
                     </View>
                   ))}
@@ -287,8 +287,8 @@ const CartScreen = ({ navigation }) => {
             </ScrollView>
 
             <View style={styles.modalTotal}>
-              <Text style={styles.modalTotalLabel}>Общая сумма:</Text>
-              <Text style={styles.modalTotalValue}>{total} ₽</Text>
+              <Text style={styles.modalTotalLabel}>Ümumi Məbləğ:</Text>
+              <Text style={styles.modalTotalValue}>{total} ₼</Text>
             </View>
 
             <View style={styles.modalButtons}>
@@ -296,7 +296,7 @@ const CartScreen = ({ navigation }) => {
                 style={styles.cancelButton}
                 onPress={() => setOrderModalVisible(false)}
               >
-                <Text style={styles.cancelButtonText}>Отмена</Text>
+                <Text style={styles.cancelButtonText}>Ləğv Et</Text>
               </TouchableOpacity>
               
               <TouchableOpacity
@@ -305,7 +305,7 @@ const CartScreen = ({ navigation }) => {
                 disabled={orderLoading}
               >
                 <Text style={styles.confirmButtonText}>
-                  {orderLoading ? 'Оформляем...' : 'Подтвердить'}
+                  {orderLoading ? 'Oformlamaq...' : 'Təsdiq et'}
                 </Text>
               </TouchableOpacity>
             </View>

@@ -31,17 +31,17 @@ const RegisterScreen = ({ navigation }) => {
   const validateForm = () => {
     if (!formData.email || !formData.password || 
         !formData.confirmPassword || !formData.firstName || !formData.lastName) {
-      Alert.alert('Ошибка', 'Пожалуйста, заполните все поля');
+      Alert.alert('Xəta', 'Bütün sahələri doldurun');
       return false;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      Alert.alert('Ошибка', 'Пароли не совпадают');
+      Alert.alert('Xəta', 'Şifrələr uyğun gəlmir');
       return false;
     }
 
     if (formData.password.length < 8) {
-      Alert.alert('Ошибка', 'Пароль должен содержать минимум 8 символов');
+      Alert.alert('Xəta', 'Şifrə ən azı 8 simvol olmalıdır');
       return false;
     }
 
@@ -62,34 +62,34 @@ const RegisterScreen = ({ navigation }) => {
       });
 
       Alert.alert(
-        'Успех! 🎉',
-        'Аккаунт успешно создан! Теперь вы можете войти в систему.',
+        'Uğurlu! 🎉',
+        'Hesab uğurla yaradıldı! İndi daxil ola bilərsiniz.',
         [
           {
-            text: 'Отлично!',
+            text: 'Əla!',
             onPress: () => navigation.navigate('Login')
           }
         ]
       );
     } catch (error) {
-      console.error('Registration error:', error);
-      let errorMessage = 'Произошла ошибка при регистрации';
+      console.error('Qeydiyyat xətası:', error);
+      let errorMessage = 'Qeydiyyat zamanı xəta baş verdi';
       
       if (error.response?.data) {
         if (error.response.data.email) {
           errorMessage = `Email: ${error.response.data.email[0]}`;
         } else if (error.response.data.password) {
-          errorMessage = `Пароль: ${error.response.data.password[0]}`;
+          errorMessage = `Şifrə: ${error.response.data.password[0]}`;
         } else if (error.response.data.password2) {
-          errorMessage = `Подтверждение пароля: ${error.response.data.password2[0]}`;
+          errorMessage = `Şifrə təsdiqi: ${error.response.data.password2[0]}`;
         } else if (error.response.data.first_name) {
-          errorMessage = `Имя: ${error.response.data.first_name[0]}`;
+          errorMessage = `Ad: ${error.response.data.first_name[0]}`;
         } else if (error.response.data.last_name) {
-          errorMessage = `Фамилия: ${error.response.data.last_name[0]}`;
+          errorMessage = `Soyad: ${error.response.data.last_name[0]}`;
         }
       }
       
-      Alert.alert('Ошибка регистрации', errorMessage);
+      Alert.alert('Qeydiyyat Xətası', errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -108,30 +108,30 @@ const RegisterScreen = ({ navigation }) => {
               style={styles.backButton}
               onPress={() => navigation.goBack()}
             >
-              <Text style={styles.backButtonText}>← Назад</Text>
+              <Text style={styles.backButtonText}>← Geri</Text>
             </TouchableOpacity>
             <Text style={styles.logo}>🍽️ Qutt</Text>
-            <Text style={styles.tagline}>Создайте свой аккаунт! ✨</Text>
+            <Text style={styles.tagline}>Hesabınızı yaradın! ✨</Text>
           </View>
 
           {/* Registration Form */}
           <View style={styles.formContainer}>
             <View style={styles.inputRow}>
               <View style={[styles.inputContainer, styles.halfWidth]}>
-                <Text style={styles.inputLabel}>👤 Имя</Text>
+                <Text style={styles.inputLabel}>👤 Ad</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="Ваше имя"
+                  placeholder="Adınız"
                   placeholderTextColor="#9E9E9E"
                   value={formData.firstName}
                   onChangeText={(value) => handleInputChange('firstName', value)}
                 />
               </View>
               <View style={[styles.inputContainer, styles.halfWidth]}>
-                <Text style={styles.inputLabel}>👤 Фамилия</Text>
+                <Text style={styles.inputLabel}>👤 Soyad</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="Ваша фамилия"
+                  placeholder="Soyadınız"
                   placeholderTextColor="#9E9E9E"
                   value={formData.lastName}
                   onChangeText={(value) => handleInputChange('lastName', value)}
@@ -145,7 +145,7 @@ const RegisterScreen = ({ navigation }) => {
               <Text style={styles.inputLabel}>📧 Email</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Введите ваш email"
+                placeholder="Email ünvanınızı daxil edin"
                 placeholderTextColor="#9E9E9E"
                 value={formData.email}
                 onChangeText={(value) => handleInputChange('email', value)}
@@ -155,10 +155,10 @@ const RegisterScreen = ({ navigation }) => {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>🔒 Пароль</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Придумайте пароль (мин. 8 символов)"
+                              <Text style={styles.inputLabel}>🔒 Şifrə</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Şifrə yaradın (min. 8 simvol)"
                 placeholderTextColor="#9E9E9E"
                 value={formData.password}
                 onChangeText={(value) => handleInputChange('password', value)}
@@ -167,10 +167,10 @@ const RegisterScreen = ({ navigation }) => {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>🔐 Подтвердите пароль</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Повторите пароль"
+                              <Text style={styles.inputLabel}>🔐 Şifrəni Təsdiqlə</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Şifrəni təkrarlayın"
                 placeholderTextColor="#9E9E9E"
                 value={formData.confirmPassword}
                 onChangeText={(value) => handleInputChange('confirmPassword', value)}
@@ -184,19 +184,19 @@ const RegisterScreen = ({ navigation }) => {
               disabled={isLoading}
             >
               <Text style={styles.registerButtonText}>
-                {isLoading ? 'Создание... 🔄' : 'Создать аккаунт 🚀'}
+                {isLoading ? 'Yaradılır... 🔄' : 'Hesab Yaradın 🚀'}
               </Text>
             </TouchableOpacity>
           </View>
 
           {/* Footer */}
           <View style={styles.footer}>
-            <Text style={styles.footerText}>Уже есть аккаунт?</Text>
+            <Text style={styles.footerText}>Artıq hesabınız var?</Text>
             <TouchableOpacity
               style={styles.loginButton}
               onPress={() => navigation.navigate('Login')}
             >
-              <Text style={styles.loginButtonText}>Войти ✨</Text>
+              <Text style={styles.loginButtonText}>Daxil Ol ✨</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

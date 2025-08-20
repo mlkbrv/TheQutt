@@ -26,18 +26,18 @@ const FarmCard = ({ farm, onPress, imageCache, addImageToCache, isImageCached, g
         onLoadStart={() => {
           const imageUrl = getFarmImageUrl(farm.image);
           if (!isImageCached(imageUrl)) {
-            console.log('🔄 Загрузка изображения для:', farm.name);
+            console.log('🔄 Şəkil yüklənir:', farm.name);
           }
         }}
         onLoad={() => {
           const imageUrl = getFarmImageUrl(farm.image);
           if (!isImageCached(imageUrl)) {
             addImageToCache(imageUrl);
-            console.log('✅ Изображение загружено для:', farm.name);
+            console.log('✅ Şəkil yükləndi:', farm.name);
           }
         }}
         onError={() => {
-          console.log('❌ Ошибка загрузки изображения для:', farm.name);
+          console.log('❌ Şəkil yükləmə xətası:', farm.name);
         }}
       />
     ) : (
@@ -63,7 +63,7 @@ const FarmCard = ({ farm, onPress, imageCache, addImageToCache, isImageCached, g
         
         <View style={styles.farmStats}>
           <Text style={styles.statText}>
-            👤 Владелец: {farm.owner?.email || 'Не указан'}
+            👤 Sahibkar: {farm.owner?.email || 'Göstərilməyib'}
           </Text>
         </View>
       </View>

@@ -49,7 +49,7 @@ const ShopOwnerOrdersScreen = ({ navigation }) => {
             orders: response.data
           };
         } catch (error) {
-          console.error(`❌ Ошибка загрузки заказов для магазина ${shop.id}:`, error);
+          console.error(`❌ Mağaza ${shop.id} üçün sifarişləri yükləmə xətası:`, error);
           ordersData[shop.id] = {
             shop: shop,
             orders: []
@@ -58,10 +58,10 @@ const ShopOwnerOrdersScreen = ({ navigation }) => {
       }
 
       setShopOrders(ordersData);
-      console.log('📦 Заказы магазинов загружены:', ordersData);
+      console.log('📦 Mağaza sifarişləri yükləndi:', ordersData);
     } catch (error) {
-      console.error('❌ Ошибка загрузки заказов:', error);
-      Alert.alert('Ошибка', 'Не удалось загрузить заказы');
+      console.error('❌ Sifarişləri yükləmə xətası:', error);
+      Alert.alert('Xəta', 'Sifarişlər yüklənə bilmədi');
     } finally {
       setIsLoading(false);
     }
@@ -80,23 +80,23 @@ const ShopOwnerOrdersScreen = ({ navigation }) => {
         { headers: getAuthHeaders(token) }
       );
       
-      Alert.alert('Успех', `Статус заказа обновлен на: ${getStatusText(newStatus)}`);
+      Alert.alert('Uğurlu', `Sifariş statusu yeniləndi: ${getStatusText(newStatus)}`);
       loadShopOrders(); // Обновляем список заказов
       setOrderModalVisible(false);
     } catch (error) {
-      console.error('❌ Ошибка обновления статуса:', error);
-      Alert.alert('Ошибка', 'Не удалось обновить статус заказа');
+      console.error('❌ Status yeniləmə xətası:', error);
+      Alert.alert('Xəta', 'Sifariş statusu yenilənə bilmədi');
     }
   };
 
   const getStatusText = (status) => {
     const statusMap = {
-      'pending': 'В ожидании',
-      'confirmed': 'Подтвержден',
-      'preparing': 'Готовится',
-      'ready': 'Готов к выдаче',
-      'delivered': 'Доставлен',
-      'cancelled': 'Отменен'
+      'pending': 'Gözləyir',
+      'confirmed': 'Təsdiqləndi',
+      'preparing': 'Hazırlanır',
+      'ready': 'Götürməyə hazırdır',
+      'delivered': 'Çatdırıldı',
+      'cancelled': 'Ləğv edildi'
     };
     return statusMap[status] || status;
   };
@@ -125,7 +125,7 @@ const ShopOwnerOrdersScreen = ({ navigation }) => {
       onPress={() => handleOrderPress({ ...item, shopId })}
     >
       <View style={styles.orderHeader}>
-        <Text style={styles.orderNumber}>📋 Заказ #{item.order_id}</Text>
+        <Text style={styles.orderNumber}>📋 Sifariş #{item.order_id}</Text>
         <Text style={[styles.orderStatus, { color: getStatusColor(item.status) }]}>
           {getStatusText(item.status)}
         </Text>
@@ -145,16 +145,16 @@ const ShopOwnerOrdersScreen = ({ navigation }) => {
 
       <View style={styles.orderItems}>
         <Text style={styles.itemsCount}>
-          📦 {item.items ? item.items.length : 0} товар(ов)
+          📦 {item.items ? item.items.length : 0} məhsul(lar)
         </Text>
         <Text style={styles.orderTotal}>
-          💰 {item.total_sum} ₽
+                            💰 {item.total_sum} ₼
         </Text>
       </View>
 
       <View style={styles.customerInfo}>
         <Text style={styles.customerName}>
-          👤 {item.user_name || 'Клиент'}
+          👤 {item.user_name || 'Müştəri'}
         </Text>
         {item.delivery_address && (
           <Text style={styles.deliveryAddress}>
@@ -174,7 +174,7 @@ const ShopOwnerOrdersScreen = ({ navigation }) => {
         <View style={styles.shopHeader}>
           <Text style={styles.shopName}>🏪 {shop.name}</Text>
           <Text style={styles.ordersCount}>
-            {orders.length} заказ(ов)
+            {orders.length} sifariş(lar)
           </Text>
         </View>
 
@@ -189,7 +189,7 @@ const ShopOwnerOrdersScreen = ({ navigation }) => {
         ) : (
           <View style={styles.noOrdersContainer}>
             <Text style={styles.noOrdersText}>
-              В этом магазине пока нет заказов
+              Bu mağazada hələ sifariş yoxdur
             </Text>
           </View>
         )}
@@ -201,7 +201,7 @@ const ShopOwnerOrdersScreen = ({ navigation }) => {
     return (
       <SafeAreaView style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#4CAF50" />
-        <Text style={styles.loadingText}>Загружаем заказы... 📦</Text>
+        <Text style={styles.loadingText}>Sifarişləri yükləyirik... 📦</Text>
       </SafeAreaView>
     );
   }
@@ -210,14 +210,14 @@ const ShopOwnerOrdersScreen = ({ navigation }) => {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>📦 Заказы магазинов</Text>
+          <Text style={styles.headerTitle}>📦 Mağaza sifarişləri</Text>
         </View>
         
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyIcon}>🏪</Text>
-          <Text style={styles.emptyTitle}>У вас пока нет магазинов</Text>
+          <Text style={styles.emptyTitle}>Sizin hələ mağazanız yoxdur</Text>
           <Text style={styles.emptyText}>
-            Создайте магазин, чтобы начать получать заказы!
+            Mağazanız yaradın, sifarişlər almağa başlayın!
           </Text>
         </View>
       </SafeAreaView>
@@ -229,9 +229,9 @@ const ShopOwnerOrdersScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>📦 Заказы магазинов</Text>
+        <Text style={styles.headerTitle}>📦 Mağaza sifarişləri</Text>
         <Text style={styles.headerSubtitle}>
-          Управляйте заказами ваших магазинов
+          Mağaza sifarişlərinizi idarə edin
         </Text>
       </View>
 
@@ -263,7 +263,7 @@ const ShopOwnerOrdersScreen = ({ navigation }) => {
               <>
                 <View style={styles.modalHeader}>
                   <Text style={styles.modalTitle}>
-                    📋 Заказ #{selectedOrder.order_id}
+                    📋 Sifariş #{selectedOrder.order_id}
                   </Text>
                   <TouchableOpacity
                     style={styles.closeModalButton}
@@ -275,52 +275,52 @@ const ShopOwnerOrdersScreen = ({ navigation }) => {
 
                 <ScrollView style={styles.orderDetails}>
                   <View style={styles.detailSection}>
-                    <Text style={styles.detailTitle}>📊 Статус заказа</Text>
+                    <Text style={styles.detailTitle}>📊 Sifariş statusu</Text>
                     <Text style={[styles.detailStatus, { color: getStatusColor(selectedOrder.status) }]}>
                       {getStatusText(selectedOrder.status)}
                     </Text>
                   </View>
 
                   <View style={styles.detailSection}>
-                    <Text style={styles.detailTitle}>📅 Дата и время</Text>
+                    <Text style={styles.detailTitle}>📅 Tarix və vaxt</Text>
                     <Text style={styles.detailText}>
                       {new Date(selectedOrder.created_at).toLocaleString('ru-RU')}
                     </Text>
                   </View>
 
                   <View style={styles.detailSection}>
-                    <Text style={styles.detailTitle}>👤 Информация о клиенте</Text>
+                    <Text style={styles.detailTitle}>👤 Müştəri məlumatları</Text>
                     <Text style={styles.detailText}>
-                      Имя: {selectedOrder.user_name || 'Не указано'}
+                      Ad: {selectedOrder.user_name || 'Məlumat yoxdur'}
                     </Text>
                     {selectedOrder.delivery_address && (
                       <Text style={styles.detailText}>
-                        Адрес: {selectedOrder.delivery_address}
+                        Ünvan: {selectedOrder.delivery_address}
                       </Text>
                     )}
                   </View>
 
                   <View style={styles.detailSection}>
-                    <Text style={styles.detailTitle}>📦 Товары в заказе</Text>
+                    <Text style={styles.detailTitle}>📦 Sifariş məhsulları</Text>
                     {selectedOrder.items && selectedOrder.items.map((item, index) => (
                       <View key={index} style={styles.orderItem}>
                         <Text style={styles.itemName}>• {item.product_name}</Text>
                         <Text style={styles.itemDetails}>
-                          {item.quantity} шт. × {item.price} ₽ = {item.quantity * item.price} ₽
+                          {item.quantity} əd. × {item.price} ₼ = {item.quantity * item.price} ₼
                         </Text>
                       </View>
                     ))}
                   </View>
 
                   <View style={styles.detailSection}>
-                    <Text style={styles.detailTitle}>💰 Итого</Text>
+                    <Text style={styles.detailTitle}>💰 Cəmi</Text>
                     <Text style={styles.totalAmount}>
-                      {selectedOrder.total_sum} ₽
+                      {selectedOrder.total_sum} ₼
                     </Text>
                   </View>
 
                   <View style={styles.detailSection}>
-                    <Text style={styles.detailTitle}>🔄 Изменить статус</Text>
+                    <Text style={styles.detailTitle}>🔄 Statusu dəyiş</Text>
                     <View style={styles.statusButtons}>
                       {['pending', 'confirmed', 'preparing', 'ready', 'delivered', 'cancelled'].map((status) => (
                         <TouchableOpacity
