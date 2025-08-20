@@ -25,7 +25,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     quantity = models.IntegerField()
-    price = models.IntegerField()
+    price = models.FloatField()
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
     picture = models.ImageField(upload_to='product_pictures/', null=True, blank=True)
 

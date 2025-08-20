@@ -47,7 +47,6 @@ class ShopSerializer(serializers.ModelSerializer):
     
     def get_picture(self, obj):
         if obj.picture:
-            # Возвращаем только имя файла
             return obj.picture.name.replace('shop_pictures/', '')
         return None
     
@@ -66,9 +65,6 @@ class ShopSerializer(serializers.ModelSerializer):
         ]
 
 class ShopCreateSerializer(serializers.ModelSerializer):
-    """
-    Serializer for creating shops by shop owners
-    """
     category = serializers.CharField(
         required=True,
         help_text="Category name for this shop (e.g., 'restaurant', 'cafe')"
@@ -101,7 +97,6 @@ class ShopCreateSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
     
     def to_representation(self, instance):
-        """Return full shop data when serializing"""
         return ShopSerializer(instance).data
 
 class ShopNameSerializer(serializers.ModelSerializer):
@@ -113,9 +108,6 @@ class ShopNameSerializer(serializers.ModelSerializer):
         ]
 
 class ProductCreateSerializer(serializers.ModelSerializer):
-    """
-    Serializer for creating products by shop owners
-    """
     class Meta:
         model = Product
         fields = [
@@ -130,7 +122,6 @@ class ProductCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ['id']
 
     def validate_shop(self, value):
-        # Проверяем, что пользователь является владельцем магазина
         request = self.context.get('request')
         if request and request.user.is_authenticated:
             if value.owner != request.user:
@@ -167,7 +158,6 @@ class ShopWithProductsSerializer(serializers.ModelSerializer):
     
     def get_picture(self, obj):
         if obj.picture:
-            # Возвращаем только имя файла
             return obj.picture.name.replace('shop_pictures/', '')
         return None
     
